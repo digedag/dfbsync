@@ -32,6 +32,8 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
  */
 class SyncTask extends AbstractTask
 {
+    private $saisonUid;
+    private $fileMatchtable;
 
     /**
      * Function executed from the Scheduler.
@@ -45,5 +47,38 @@ class SyncTask extends AbstractTask
 
         return $success;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSaisonUid()
+    {
+        return $this->saisonUid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFileMatchtable()
+    {
+        return $this->fileMatchtable;
+    }
+
+    /**
+     * @param mixed $saisonUid
+     */
+    public function setSaisonUid($saisonUid)
+    {
+        $this->saisonUid = $saisonUid;
+    }
+
+    /**
+     * @param mixed $fileMatchtable
+     */
+    public function setFileMatchtable($fileMatchtable)
+    {
+        $this->fileMatchtable = $fileMatchtable;
+    }
+
 }
 
