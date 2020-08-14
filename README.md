@@ -13,3 +13,4 @@ What is this extension for?
 
 Import and update competitions from [DFB Sportmedia](https://www.sportmedia.de/).
 
+**Die Erweiterung wurde mit freundlicher Unterstützung von [webfacemedia aus Limburg](https://www.webfacemedia.de/) für das regionale Fußballportal [FLW24](https://flw24.de/) umgesetzt.**
