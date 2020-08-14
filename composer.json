@@ -1,0 +1,73 @@
+{
+	"name": "digedag/dfbsync",
+	"description": "Synchronize competitions of T3sports with data from DFB Sportmedia.",
+	"type": "typo3-cms-extension",
+	"keywords": [
+		"TYPO3 CMS",
+		"mvc",
+		"sports",
+		"football"
+	],
+	"homepage": "http://www.system25.de/",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "René Nitzsche",
+			"email": "rene@system25.de",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "rene@system25.de",
+		"source": "https://github.com/digedag/dfbsync",
+		"issues": "https://github.com/digedag/dfbsync/issues"
+	},
+	"replace": {
+		"typo3-ter/dfbsync": "self.version",
+		"digedag/dfbsync": "self.version"
+	},
+	"require": {
+		"typo3/cms-core": "^8.7 || ^9.5.17 || ^10.4.3",
+		"digedag/rn-base": "^1.12.0"
+	},
+	"require-dev": {
+		"namelesscoder/typo3-repository-client": "^1.2",
+		"nimut/testing-framework": "^1.1 || ^2.0 || ^4.0 || ^5.0",
+		"mikey179/vfsstream": "^1.4 || ^1.6",
+		"phpunit/phpunit": "^4.7|| ^7.0",
+		"friendsofphp/php-cs-fixer": "^2.15"
+	},
+	"autoload": {
+        "psr-4": {"System25\\T3sports\\DfbSync\\" : "Classes"}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"System25\\T3sports\\DfbSync\\Tests\\" : "Tests/Unit/PHP",
+			"TYPO3\\CMS\\Core\\Tests\\":".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
+			"TYPO3\\CMS\\Fluid\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
+		}
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
+		"preferred-install": {
+			"typo3/cms": "source"
+		}
+	},
+	"scripts": {
+		"post-autoload-dump": [
+			"mkdir -p .Build/Web/typo3conf/ext/",
+			"[ -L .Build/Web/typo3conf/ext/dfbsync ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/dfbsync"
+		]
+	},
+	"extra": {
+		"typo3/cms": {
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"extension-key": "dfbsync",
+			"web-dir": ".Build/Web"
+		},
+		"branch-alias": {
+			"dev-master": "0.x-dev"
+		}
+	}
+}
