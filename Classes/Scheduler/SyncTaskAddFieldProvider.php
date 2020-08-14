@@ -1,5 +1,5 @@
 <?php
-namespace System25\T3sports\DfbNet\Scheduler;
+namespace System25\T3sports\DfbSync\Scheduler;
 
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
@@ -80,7 +80,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             if ($currentSchedulerModuleAction->equals(Action::ADD) && empty($options)) {
                 // Select first table by default if adding a new task
                 $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
-            } elseif ($task->getSaisonUid() === $uid) {
+            } elseif ($task && $task->getSaisonUid() === $uid) {
                 // Select currently selected table
                 $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
             } else {
@@ -94,7 +94,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $fieldHtml[] = '<select class="form-control" name="' . $fieldName . '" id="' . $fieldId . '">' . implode(LF, $options) . '</select>';
         $fieldConfiguration = [
             'code' => implode(LF, $fieldHtml),
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang.xml:label_scheduler_saison',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_saison',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
         return $fieldConfiguration;
@@ -114,10 +114,10 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             $taskInfo[$fieldId] = $task && $task->getFileMatchtable() ?? 180;
         }
         $fieldName = 'tx_scheduler[' . $fieldId . ']';
-        $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . (int)$taskInfo[$fieldId] . '" ' . 'size="30">';
+        $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . $taskInfo[$fieldId] . '" ' . 'size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang.xml:label_scheduler_file_matchtable',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_matchtable',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
         return $fieldConfiguration;
@@ -141,7 +141,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
      * @return bool TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
-    public function validateAdditionalFields(array $submittedData, SchedulerModuleController $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
     {
         return true;
     }

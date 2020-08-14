@@ -50,7 +50,7 @@ Die UID der aktuellen Saison. Der Sync wird ausschließlich Wettbewerbe dieser S
 Hier muss der korrekte Pfad zur Spielplan-Datei eingetragen werden. Der Name der eigentlichen Datei wird dabei dynamisch über einen Platzhalter gebildet. Es wird ein ähnliches Format wie beim DFB verwendet. Allerdings steht nur der Platzhalter `${divisionId}` zur Verfügung. Analog zum Beispielpfad in den Einstellungen beim Sportmedia könnte der Pfad in TYPO3 so aussehen: 
 
 ```
-some/folder/2021/staffel_${divisionId}
+some/folder/2021/staffel_${divisionId}.xml
 ```
 
 Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit einer externen ID. Wenn für die ID (die Staffel-Kennung des DFB) eine Spielplan-Datei gefunden wird, dann werden die Daten synchronisiert.

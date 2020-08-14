@@ -1,5 +1,5 @@
 <?php
-namespace System25\T3sports\DfbNet\Scheduler;
+namespace System25\T3sports\DfbSync\Scheduler;
 
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
