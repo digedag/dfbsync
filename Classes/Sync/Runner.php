@@ -112,6 +112,6 @@ class Runner
     {
         $isAbs = \tx_rnbase_util_Files::isAbsPath($fileTemplate);
         $path = $isAbs ? $fileTemplate : PATH_site . $fileTemplate;
-        return str_replace('${divisionId}', $competition->getProperty('extid'), $path);
+        return str_replace('${divisionIdentifier}', $competition->getProperty('extid'), $path);
     }
 }

@@ -107,7 +107,6 @@ class CompetitionSync
      * @param array $data
      * @param Paarung $paarung
      * @param \tx_cfcleague_models_Competition $competition
-     * @param string $dflCompetitionId
      * @param array $info
      */
     private function handleMatch(&$data, Paarung $paarung, $competition, &$info)
@@ -142,7 +141,7 @@ class CompetitionSync
     /**
      * Liefert die UID des Teams, oder einen NEW_-Key
      *
-     * @param string $dflId
+     * @param string $extId
      * @param [] $data
      * @param \tx_cfcleague_models_Competition $competition
      * @return string

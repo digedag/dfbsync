@@ -26,10 +26,10 @@ Die Erweiterung verwendet für die Synchronisation derzeit ausschließlich den D
 Der FTP-Versand muss so eingerichtet werden, daß alle Dateien einer Saison im selben Verzeichnis erstellt werden. Ein empfohlender Dateipfad würde so aussehen:
 
 ```
-some/folder/${season}/staffel_${divisionId}
+some/folder/${season}/staffel_${divisionIdentifier}
 ```
 
-Die **divisionId** ist die Staffelkennung. Diese ID ist NICHT eineindeutig. Sie wird also über mehrere Jahre für die gleiche Staffel verwendet. Im XML des Spielplans entspricht die **divisionId** dem Attribut **kennung** im Tag `kopfdaten->staffel`.
+Der **divisionIdentifier** ist die Staffelkennung. Diese ID ist NICHT eineindeutig. Sie wird also über mehrere Jahre für die gleiche Staffel verwendet. Im XML des Spielplans entspricht die **divisionIdentifier** dem Attribut **kennung** im Tag `kopfdaten->staffel`.
 
 ### Vorarbeiten in TYPO3
 
@@ -55,10 +55,10 @@ Folgende Angaben müssen gemacht werden:
 Auswahl der aktuellen Saison. Der Sync wird ausschließlich Wettbewerbe dieser Saison bearbeiten. Müssen gleichzeitig Wettbewerbe aus mehreren Spielzeiten synchronisiert werden, dann wird für jede Saison ein eigener Scheduler-Task benötigt.
 
 **Pfad zum Spielplan**
-Hier muss der korrekte Pfad zur Spielplan-Datei eingetragen werden. Der Name der eigentlichen Datei wird dabei dynamisch über einen Platzhalter gebildet. Es wird ein ähnliches Format wie beim DFB verwendet. Allerdings steht nur der Platzhalter `${divisionId}` zur Verfügung. Analog zum Beispielpfad in den Einstellungen beim Sportmedia könnte der Pfad in TYPO3 so aussehen: 
+Hier muss der korrekte Pfad zur Spielplan-Datei eingetragen werden. Der Name der eigentlichen Datei wird dabei dynamisch über einen Platzhalter gebildet. Es wird ein ähnliches Format wie beim DFB verwendet. Allerdings steht nur der Platzhalter `${divisionIdentifier}` zur Verfügung. Analog zum Beispielpfad in den Einstellungen beim Sportmedia könnte der Pfad in TYPO3 so aussehen: 
 
 ```
-some/folder/2021/staffel_${divisionId}.xml
+some/folder/2021/staffel_${divisionIdentifier}.xml
 ```
 
 Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit einer externen ID. Wenn für die ID (die Staffel-Kennung des DFB) eine Spielplan-Datei gefunden wird, dann werden die Daten synchronisiert. Die Angabe des Pfad kann entweder absolut oder relativ zum Installationsverzeichnis (PATH_site) von TYPO3 erfolgen.
@@ -68,7 +68,7 @@ Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit e
 Alternativ zum Scheduler-Task kann die Synchronisation auch per Command ausgeführt werden. Es sind die gleichen Parameter notwendig.
 
 ```
-$ ./vendor/bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionId}.xml
+$ ./vendor/bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionIdentifier}.xml
 ```
 
 In diesem Beispiel erfolgt die Synchronisation für Wettbewerbe der Saison mit der UID "2".
