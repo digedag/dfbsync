@@ -128,7 +128,7 @@ class CompetitionSync
         $data[self::TABLE_GAMES][$matchUid]['round_name'] = $paarung->getSpieltag() . '. Spieltag';
         // Es muss ein lokaler Timestamp gesetzt werden
         $kickoff = $paarung->getDatum();
-        $data[self::TABLE_GAMES][$matchUid]['date'] = ($kickoff->getTimestamp() + $kickoff->getOffset());
+        $data[self::TABLE_GAMES][$matchUid]['date'] = ($kickoff->getTimestamp());
         $data[self::TABLE_GAMES][$matchUid]['stadium'] = $paarung->getStadionName();
         $data[self::TABLE_GAMES][$matchUid]['home'] = $this->findTeam($paarung->getHeim(), $data, $competition);
         $data[self::TABLE_GAMES][$matchUid]['guest'] = $this->findTeam($paarung->getGast(), $data, $competition);
