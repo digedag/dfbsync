@@ -29,7 +29,7 @@
 	"require": {
 		"typo3/cms-core": "^8.7 || ^9.5.17 || ^10.4.3",
 		"digedag/rn-base": "^1.12.0",
-		"digedag/cfc-league": "^1.5.1"
+		"digedag/cfc-league": "^1.5.2"
 	},
 	"require-dev": {
 		"namelesscoder/typo3-repository-client": "^1.2",
@@ -68,7 +68,7 @@
 			"web-dir": ".Build/Web"
 		},
 		"branch-alias": {
-			"dev-master": "0.x-dev"
+			"dev-master": "1.x-dev"
 		}
 	}
 }
