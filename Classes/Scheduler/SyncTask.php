@@ -2,6 +2,7 @@
 namespace System25\T3sports\DfbSync\Scheduler;
 
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
+use System25\T3sports\DfbSync\Sync\Runner;
 
 /**
  * *************************************************************
@@ -44,16 +45,27 @@ class SyncTask extends AbstractTask
     public function execute()
     {
         $success = true;
-
+        try {
+            $runner = new Runner();
+            $runner->sync($this->getSaisonUid(), $this->getFileMatchtable());
+        } catch (\Exception $e) {
+            \tx_rnbase_util_Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
+            //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
+            //also machen wir das manuell
+            if($addr = \tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+                \tx_rnbase_util_Misc::sendErrorMail($addr, self::class, $e);
+            }
+            $success = false;
+        }
         return $success;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getSaisonUid()
     {
-        return $this->saisonUid;
+        return (int) $this->saisonUid;
     }
 
     /**

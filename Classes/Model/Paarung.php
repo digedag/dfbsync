@@ -49,7 +49,7 @@ class Paarung
         $this->id = $node->getValueFromPath('spiel.id');
         $this->nummer = $node->getIntFromPath('spiel.nummer');
         $this->spieltag = $node->getIntFromPath('spieltag');
-        $this->status = $node->getIntFromPath('spiel.status');
+        $this->status = $node->getIntFromPath('spiel.status.id');
         $tag = $node->getValueFromPath('spiel.datum');
         $zeit = $node->getValueFromPath('spiel.uhrzeit');
         $this->datum = new \DateTime($tag .' '.$zeit);

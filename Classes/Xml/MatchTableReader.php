@@ -3,6 +3,7 @@ namespace System25\T3sports\DfbSync\Xml;
 
 use System25\T3sports\DfbSync\Model\Kopfdaten;
 use System25\T3sports\DfbSync\Model\Paarung;
+use System25\T3sports\DfbSync\Model\Team;
 
 /**
  * *************************************************************
@@ -35,12 +36,14 @@ class MatchTableReader
 
     private $reader;
     private $kopfdaten;
+    private $clubs = [];
     private $teams = [];
     private $matches = [];
 
     public function __construct($file)
     {
         $this->readHeader($this->createReader($file));
+        $this->readClubs($this->createReader($file));
         $this->readTeams($this->createReader($file));
         $this->readMatches($this->createReader($file));
     }
@@ -69,6 +72,17 @@ class MatchTableReader
         }
     }
 
+    private function readClubs(\XMLReader $reader)
+    {
+        while ($reader->read() && $reader->name !== 'verein');
+        while ($reader->name === 'verein') {
+            $node = $this->expandNode($reader);
+            $teamId = $node->getValueFromPath('mannschaftId');
+            $clubId = $node->getValueFromPath('id');
+            $this->clubs[$teamId] = $clubId;
+            $reader->next('verein');
+        }
+    }
     private function readTeams(\XMLReader $reader)
     {
         while ($reader->read() && $reader->name !== 'paarung');
@@ -76,11 +90,13 @@ class MatchTableReader
             $node = $this->expandNode($reader);
             $homeId = $node->getValueFromPath('heimmannschaft.id');
             if (!array_key_exists($homeId, $this->teams)) {
-                $this->teams[$homeId] = $node->getValueFromPath('heimmannschaft.name');
+                $clubId = isset($this->clubs[$homeId]) ? $this->clubs[$homeId] : null;
+                $this->teams[$homeId] = new Team($homeId, $node->getValueFromPath('heimmannschaft.name'), $clubId);
             }
             $guestId = $node->getValueFromPath('gastmannschaft.id');
             if (!array_key_exists($guestId, $this->teams)) {
-                $this->teams[$guestId] = $node->getValueFromPath('gastmannschaft.name');
+                $clubId = isset($this->clubs[$guestId]) ? $this->clubs[$guestId] : null;
+                $this->teams[$guestId] = new Team($guestId, $node->getValueFromPath('gastmannschaft.name'), $clubId);
             }
             $reader->next('paarung');
         }
@@ -100,6 +116,10 @@ class MatchTableReader
         return $this->kopfdaten;
     }
 
+    /**
+     *
+     * @return Team[]
+     */
     public function getTeams() : array
     {
         return $this->teams;

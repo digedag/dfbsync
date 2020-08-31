@@ -4,6 +4,8 @@ namespace System25\T3sports\DfbSync\Tests\Scheduler;
 
 use System25\T3sports\DfbSync\Xml\MatchTableReader;
 use System25\T3sports\DfbSync\Model\Kopfdaten;
+use System25\T3sports\DfbSync\Model\Paarung;
+use System25\T3sports\DfbSync\Model\Team;
 
 /***************************************************************
 *  Copyright notice
@@ -47,6 +49,13 @@ class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
         $matches = $reader->getMatches();
         $this->assertCount(306, $matches);
 
+        /* @var $match Paarung */
+        $match = $matches[0];
+        $this->assertEquals('0208HMMHAS000000VS54898DVUVCCN5J', $match->getId());
+        $this->assertEquals('A-Stadion', $match->getStadionName());
+        $this->assertEquals(8, $match->getNummer());
+        $this->assertEquals(600, $match->getStatus());
+
     }
 
     /**
@@ -58,7 +67,12 @@ class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
 
         $teams = $reader->getTeams();
         $this->assertCount(18, $teams);
-
+        /* @var $team Paarung */
+        $team = $teams['011MAI8MVC000000VTVG0001ABC8C1K7'];
+        $this->assertInstanceOf(Team::class, $team);
+        $this->assertEquals('011MAI8MVC000000VTVG0001ABC8C1K7', $team->getId(), 'team id is wrong');
+        $this->assertEquals('FC Team A', $team->getName());
+        $this->assertEquals('00ES8GNBC800007UVV0AG08LVUPGND5I', $team->getClubId(), 'club id is wrong');
     }
 
     /**

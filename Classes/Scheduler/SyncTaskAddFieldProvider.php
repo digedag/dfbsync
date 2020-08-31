@@ -80,7 +80,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             if ($currentSchedulerModuleAction->equals(Action::ADD) && empty($options)) {
                 // Select first table by default if adding a new task
                 $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
-            } elseif ($task && $task->getSaisonUid() === $uid) {
+            } elseif ($task && ($task->getSaisonUid() === $uid)) {
                 // Select currently selected table
                 $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
             } else {
@@ -111,7 +111,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
     {
         $fieldId = self::FIELD_FILE_MATCHTABLE;
         if (empty($taskInfo[$fieldId])) {
-            $taskInfo[$fieldId] = $task && $task->getFileMatchtable() ?? 180;
+            $taskInfo[$fieldId] = $task && $task->getFileMatchtable() ? $task->getFileMatchtable() : '';
         }
         $fieldName = 'tx_scheduler[' . $fieldId . ']';
         $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . $taskInfo[$fieldId] . '" ' . 'size="30">';

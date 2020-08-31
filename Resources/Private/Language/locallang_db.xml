@@ -8,10 +8,19 @@
 		<languageKey index="default" type="array">
 			<label index="label_scheduler_file_matchtable">Path of matchtable file with pattern (some/saison/staffel_${divisionId}.xml)</label>
 			<label index="label_scheduler_saison">Saison to sync</label>
+			<label index="tx_dfbsync_data">DFB sync data</label>
+			<label index="tx_dfbsync_data_lastsync">Last sync time</label>
+			<label index="tx_dfbsync_data_success">Last sync successful</label>
+
+			
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="label_scheduler_file_matchtable">Pfad der Spielplan-Datei des DFB mit Platzhalter (zur/saison/staffel_${divisionId}.xml)</label>
 			<label index="label_scheduler_saison">Saison</label>
+
+			<label index="tx_dfbsync_data">DFB Syncdaten</label>
+			<label index="tx_dfbsync_data_lastsync">Letzte Synchronisation</label>
+			<label index="tx_dfbsync_data_success">Letzte Synchronisation erfolgreich</label>
 		</languageKey>
 	</data>
 </T3locallang>
