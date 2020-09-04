@@ -36,6 +36,7 @@ class SyncCommand extends Command
     {
         $this->setDescription('Sync competition with DFB data source')
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Search path for XML files')
+            ->addOption('competition', 'c', InputOption::VALUE_OPTIONAL, 'TYPO3 uid of specific competition to sync')
             ->addOption('saison', 's', InputOption::VALUE_REQUIRED, 'UID of current saison');
     }
 
@@ -54,6 +55,7 @@ class SyncCommand extends Command
         $io->title($this->getDescription());
         $path = $input->getOption('path');
         $saisonUid = (int) $input->getOption('saison');
+        $competitionUid = (int) $input->getOption('competition');
 
         $isAbs = \tx_rnbase_util_Files::isAbsPath($path);
         $io->note('Path: '. $path . ': '.($isAbs ? 'Abs' : 'rel'));
@@ -61,7 +63,7 @@ class SyncCommand extends Command
         $io->note('Path-site: ' . PATH_site);
 
         $runner = new Runner();
-        $info = $runner->sync($saisonUid, $path);
+        $info = $runner->sync($saisonUid, $path, $competitionUid);
         $io->note(print_r($info, true));
         $io->success('Done');
     }

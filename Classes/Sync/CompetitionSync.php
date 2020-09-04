@@ -156,6 +156,10 @@ class CompetitionSync
             $fields = [];
             $fields['TEAM.EXTID'][OP_EQ_NOCASE] = $extId;
             $fields['TEAM.PID'][OP_EQ_INT] = $competition->getPid();
+            if (!$extId) {
+                // Team für spielfrei
+                $fields['TEAM.DUMMY'][OP_EQ_INT] = 1;
+            }
 
             $options = ['what' => 'uid',];
             $ret = $teamSrv->searchTeams($fields, $options);
@@ -216,7 +220,17 @@ class CompetitionSync
 
     private function loadTeamData($extId)
     {
-        if (array_key_exists($extId, $this->xmlReader->getTeams())) {
+        if (!$extId) {
+            // Spielfrei
+            return [
+                'pid' => $this->pageUid,
+                'extid' => '',
+                'name' => 'spielfrei',
+                'short_name' => 'spielfrei',
+                'dummy' => 1,
+            ];
+        }
+        elseif (array_key_exists($extId, $this->xmlReader->getTeams())) {
             /* @var $team Team */
             $team = $this->xmlReader->getTeams()[$extId];
             return [

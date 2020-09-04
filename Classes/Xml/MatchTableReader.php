@@ -51,13 +51,9 @@ class MatchTableReader
     private function createReader($file)
     {
         $reader = new \XMLReader();
-        try {
-            if (! $reader->open($file, 'UTF-8', 0)) {
-                \tx_rnbase_util_Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
-                throw new \Exception('Error reading xml string!');
-            }
-        } catch (\Exception $e) {
-            throw new \Exception('Missing XML file');
+        if (! $reader->open($file, 'UTF-8', 0)) {
+            \tx_rnbase_util_Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
+            throw new \Exception(sprintf('Error reading XML file %s', $file));
         }
         return $reader;
     }

@@ -48,13 +48,13 @@ class Runner
         $this->syncRepo = new SyncDataRepository();
     }
 
-    public function sync(int $saisonUid, $fileTemplate): array
+    public function sync(int $saisonUid, $fileTemplate, int $competitionUid = 0): array
     {
         $info = [
             self::INFO_COMP_FOUND => 0,
             self::INFO_COMP_SYNCED => 0,
         ];
-        $competition = $this->lookupCompetition($info, $saisonUid);
+        $competition = $this->lookupCompetition($info, $saisonUid, $competitionUid);
         if (!$competition) {
             return $info;
         }
@@ -94,13 +94,18 @@ class Runner
         return $data;
     }
 
-    private function lookupCompetition(&$info, $saisonUid): ?\tx_cfcleague_models_Competition
+    private function lookupCompetition(&$info, $saisonUid, $competitionUid): ?\tx_cfcleague_models_Competition
     {
         // Suche nächsten Wettbewerb zum Sync
         $fields = $options = [];
-        $fields['COMPETITION.SAISON'][OP_EQ_INT] = $saisonUid;
-        $fields['COMPETITION.EXTID'][OP_NOTEQ] = '';
-        $options['orderby']['DFBSYNC.lastsync'] = 'asc';
+        if ($competitionUid) {
+            $fields['COMPETITION.UID'][OP_EQ_INT] = $competitionUid;
+        }
+        else {
+            $fields['COMPETITION.SAISON'][OP_EQ_INT] = $saisonUid;
+            $fields['COMPETITION.EXTID'][OP_NOTEQ] = '';
+            $options['orderby']['DFBSYNC.lastsync'] = 'asc';
+        }
         $compSrv = \tx_cfcleague_util_ServiceRegistry::getCompetitionService();
         $comps = $compSrv->search($fields, $options);
         $info[self::INFO_COMP_FOUND] = count($comps);

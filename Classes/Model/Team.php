@@ -34,18 +34,21 @@ class Team
 
     private $name;
 
+    private $noMatch;
+
     public function __construct($id, $name, $clubId)
     {
         $this->id = $id;
         $this->name = $name;
         $this->clubId = $clubId;
+        $this->noMatch = $id ? false : true;
     }
 
     /**
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -54,7 +57,7 @@ class Team
      *
      * @return mixed
      */
-    public function getClubId()
+    public function getClubId(): string
     {
         return $this->clubId;
     }
@@ -63,8 +66,13 @@ class Team
      *
      * @return mixed
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
+    }
+
+    public function isNoMatch(): bool
+    {
+        return $this->noMatch;
     }
 }
