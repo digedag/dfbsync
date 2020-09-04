@@ -2,11 +2,12 @@
 
 ## Allgemeines
 
-Die Erweiterung verwendet für die Synchronisation derzeit ausschließlich den Dateityp **Spielplan**. Folgende Daten werden abgeglichen:
+Die Erweiterung verwendet für die Synchronisation die Dateitypen **Spielplan** und **Ergebnisse**. Folgende Daten werden abgeglichen:
 
 ### Team
 
 * Name
+* Spielfrei
 * Verein (optional)
 
 ### Spiel
@@ -23,10 +24,11 @@ Die Erweiterung verwendet für die Synchronisation derzeit ausschließlich den D
 
 ### Vorarbeiten bei Sportmedia
 
-Der FTP-Versand muss so eingerichtet werden, daß alle Dateien einer Saison im selben Verzeichnis erstellt werden. Ein empfohlender Dateipfad würde so aussehen:
+Der FTP-Versand muss so eingerichtet werden, daß alle Dateien eines Typs in einer Saison im selben Verzeichnis erstellt werden. Die empfohlenen Dateipfade würden so aussehen:
 
 ```
-some/folder/${season}/staffel_${divisionIdentifier}
+some/folder/${season}/staffel_${divisionIdentifier}_spielplan
+some/folder/${season}/staffel_${divisionIdentifier}_ergebnisse
 ```
 
 Der **divisionIdentifier** ist die Staffelkennung. Diese ID ist NICHT eineindeutig. Sie wird also über mehrere Jahre für die gleiche Staffel verwendet. Im XML des Spielplans entspricht die **divisionIdentifier** dem Attribut **kennung** im Tag `kopfdaten->staffel`.
@@ -41,7 +43,7 @@ Es können mehrere Wettbewerbe angelegt und synchronisiert werden.
 
 #### Vereine anpassen
 
-Während der Synchronisation werden die Teams automatisch angelegt. Die Spielplandatei des DFB enthält für jede Mannschaft auch eine ID für den Verein. Wenn diese ID in einen vorhandenen Vereinsdatensatz von T3sports als externe ID eingetragen wird, dann wird die neue Mannschaft automatisch diesem Verein zugeordnet.
+Während der Synchronisation werden die Teams automatisch angelegt. Die Spielplandatei des DFB enthält für jede Mannschaft auch eine ID für den Verein. Wenn diese ID in einen vorhandenen Vereinsdatensatz von **T3sports** als externe ID eingetragen wird, dann wird die neue Mannschaft automatisch diesem Verein zugeordnet.
 
 **Diese Zuordnung erfolgt auschließlich bei der Neuanlage von Teams! Team-Datensätze werden grundsätzlich nicht aktualisiert.**
 
@@ -52,23 +54,37 @@ Für die Synchronisation muss nun ein Scheduler-Task vom Typ **[DFB Sync] Spielp
 Folgende Angaben müssen gemacht werden:
 
 **Saison**
+
 Auswahl der aktuellen Saison. Der Sync wird ausschließlich Wettbewerbe dieser Saison bearbeiten. Müssen gleichzeitig Wettbewerbe aus mehreren Spielzeiten synchronisiert werden, dann wird für jede Saison ein eigener Scheduler-Task benötigt.
 
-**Pfad zum Spielplan**
-Hier muss der korrekte Pfad zur Spielplan-Datei eingetragen werden. Der Name der eigentlichen Datei wird dabei dynamisch über einen Platzhalter gebildet. Es wird ein ähnliches Format wie beim DFB verwendet. Allerdings steht nur der Platzhalter `${divisionIdentifier}` zur Verfügung. Analog zum Beispielpfad in den Einstellungen beim Sportmedia könnte der Pfad in TYPO3 so aussehen: 
+**Pfad der Spielplan-Datei**
+
+Hier muss der korrekte Pfad zur Spielplan-Datei eingetragen werden. Der Name der eigentlichen Datei wird dabei dynamisch über einen Platzhalter gebildet. Es wird ein ähnliches Format wie beim DFB verwendet. Allerdings steht nur der Platzhalter `${divisionIdentifier}` zur Verfügung. Die Angabe des Pfads kann entweder absolut oder relativ zum Installationsverzeichnis (PATH_site) von TYPO3 erfolgen.
+
+Analog zum Beispielpfad in den Einstellungen beim Sportmedia könnte der Pfad in TYPO3 so aussehen: 
 
 ```
-some/folder/2021/staffel_${divisionIdentifier}.xml
+some/folder/2021/staffel_${divisionIdentifier}_spielplan.xml
 ```
 
-Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit einer externen ID. Wenn für die ID (die Staffel-Kennung des DFB) eine Spielplan-Datei gefunden wird, dann werden die Daten synchronisiert. Die Angabe des Pfad kann entweder absolut oder relativ zum Installationsverzeichnis (PATH_site) von TYPO3 erfolgen.
+**Pfad der Ergebnis-Datei**
+
+Es gelten die selben Regeln wie bei der Spielplan-Datei.
+
+```
+some/folder/2021/staffel_${divisionIdentifier}_ergebnisse.xml
+```
+
+Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit einer externen ID. Wenn für die ID (die Staffel-Kennung des DFB) eine Spielplan-Datei gefunden wird, dann werden die Daten synchronisiert. Für jede Paarung wird automatisch nach einem Eintrag in der Ergebnis-Datei gesucht. Gibt es einen Treffer, dann werden die Spieldaten aus der Ergebnis-Datei verwendet.
 
 #### Ausführung per Command
 
 Alternativ zum Scheduler-Task kann die Synchronisation auch per Command ausgeführt werden. Es sind die gleichen Parameter notwendig.
 
 ```
-$ ./vendor/bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionIdentifier}.xml
+$ ./vendor/bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionIdentifier}_spielplan.xml -r ../spielplan_\${divisionIdentifier}_ergebnisse.xml
 ```
 
 In diesem Beispiel erfolgt die Synchronisation für Wettbewerbe der Saison mit der UID "2".
+
+Per Command hat man zusätzlich mit der Option `-c` die Möglichkeit einen bestimmten Wettbewerb zu synchronisieren. Dafür einfach die UID des Wettbewerbs angeben.

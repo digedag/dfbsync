@@ -37,6 +37,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
 {
     const FIELD_SAISON_UID = 'task_dfbsync_saison';
     const FIELD_FILE_MATCHTABLE = 'task_dfbsync_file_matchtable';
+    const FIELD_FILE_RESULTS = 'task_dfbsync_file_results';
 
     /**
      * Add a multi select box with all available cache backends.
@@ -51,6 +52,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $additionalFields = [];
         $additionalFields[self::FIELD_SAISON_UID] = $this->getSaisonField($taskInfo, $task, $schedulerModule);
         $additionalFields[self::FIELD_FILE_MATCHTABLE] = $this->getFileMatchtableField($taskInfo, $task, $schedulerModule);
+        $additionalFields[self::FIELD_FILE_RESULTS] = $this->getFileResultsField($taskInfo, $task, $schedulerModule);
         return $additionalFields;
     }
 
@@ -124,6 +126,29 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
     }
 
     /**
+     *
+     * @param array $taskInfo Reference to the array containing the info used in the add/edit form
+     * @param SyncTask|null $task When editing, reference to the current task. NULL when adding.
+     * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     * @return array Array containing all the information pertaining to the additional fields
+     */
+    protected function getFileResultsField(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
+    {
+        $fieldId = self::FIELD_FILE_RESULTS;
+        if (empty($taskInfo[$fieldId])) {
+            $taskInfo[$fieldId] = $task && $task->getFileResults() ? $task->getFileResults() : '';
+        }
+        $fieldName = 'tx_scheduler[' . $fieldId . ']';
+        $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . $taskInfo[$fieldId] . '" ' . 'size="30">';
+        $fieldConfiguration = [
+            'code' => $fieldHtml,
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_results',
+            'cshKey' => '_MOD_system_txschedulerM1',
+        ];
+        return $fieldConfiguration;
+    }
+
+    /**
      * Save selected backends in task object
      *
      * @param array $submittedData Contains data submitted by the user
@@ -133,6 +158,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
     {
         $task->setSaisonUid($submittedData[self::FIELD_SAISON_UID]);
         $task->setFileMatchtable($submittedData[self::FIELD_FILE_MATCHTABLE]);
+        $task->setFileResults($submittedData[self::FIELD_FILE_RESULTS]);
     }
 
     /**

@@ -35,6 +35,7 @@ class SyncTask extends AbstractTask
 {
     private $saisonUid;
     private $fileMatchtable;
+    private $fileResults;
 
     /**
      * Function executed from the Scheduler.
@@ -47,7 +48,7 @@ class SyncTask extends AbstractTask
         $success = true;
         try {
             $runner = new Runner();
-            $runner->sync($this->getSaisonUid(), $this->getFileMatchtable());
+            $runner->sync($this->getSaisonUid(), $this->getFileMatchtable(), $this->getFileResults());
         } catch (\Exception $e) {
             \tx_rnbase_util_Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
             //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
@@ -77,6 +78,14 @@ class SyncTask extends AbstractTask
     }
 
     /**
+     * @return string
+     */
+    public function getFileResults()
+    {
+        return $this->fileResults;
+    }
+
+    /**
      * @param mixed $saisonUid
      */
     public function setSaisonUid($saisonUid)
@@ -92,5 +101,12 @@ class SyncTask extends AbstractTask
         $this->fileMatchtable = $fileMatchtable;
     }
 
+    /**
+     * @param string $fileResults
+     */
+    public function setFileResults($fileResults)
+    {
+        $this->fileResults = $fileResults;
+    }
 }
 

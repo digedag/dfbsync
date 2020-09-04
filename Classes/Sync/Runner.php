@@ -38,6 +38,7 @@ class Runner
     const INFO_COMP_FOUND = 'compFound';
     const INFO_COMP_SYNCED = 'compSynced';
     const INFO_COMP_FILE = 'compFile';
+    const INFO_RESULT_FILE = 'resultFile';
 
     private $sync;
     private $syncRepo;
@@ -48,7 +49,16 @@ class Runner
         $this->syncRepo = new SyncDataRepository();
     }
 
-    public function sync(int $saisonUid, $fileTemplate, int $competitionUid = 0): array
+    /**
+     *
+     * @param int $saisonUid
+     * @param string $scheduleFile Datei mit Spielplan
+     * @param string $resultFile Ergebnisdatei
+     * @param int $competitionUid
+     * @throws \Exception
+     * @return array
+     */
+    public function sync(int $saisonUid, $scheduleFile, $resultFile, int $competitionUid = 0): array
     {
         $info = [
             self::INFO_COMP_FOUND => 0,
@@ -60,11 +70,13 @@ class Runner
         }
         $info[self::INFO_COMP_SYNCED] = sprintf('%d (%s)', $competition->getUid(), $competition->getName());
 
-        $fileName = $this->getFileName($fileTemplate, $competition);
-        $info[self::INFO_COMP_FILE] = $fileName;
+        $scheduleFileName = $this->getFileName($scheduleFile, $competition);
+        $info[self::INFO_COMP_FILE] = $scheduleFileName;
+        $resultFileName = $this->getFileName($resultFile, $competition);
+        $info[self::INFO_RESULT_FILE] = $resultFileName;
 
         try {
-            $this->sync->doSync($competition, $fileName, $info);
+            $this->sync->doSync($competition, $scheduleFileName, $resultFileName, $info);
         }
         catch (\Exception $e) {
             $this->updateSyncData($competition, false);

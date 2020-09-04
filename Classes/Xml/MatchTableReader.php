@@ -62,8 +62,8 @@ class MatchTableReader
     {
         while ($reader->read() && $reader->name !== 'paarung');
         while ($reader->name === 'paarung') {
-            $node = $this->expandNode($reader);
-            $this->matches[] = new Paarung($node);
+            $paarung = new Paarung($this->expandNode($reader));
+            $this->matches[$paarung->getId()] = $paarung;
             $reader->next('paarung');
         }
     }
@@ -121,6 +121,10 @@ class MatchTableReader
         return $this->teams;
     }
 
+    /**
+     *
+     * @return Paarung[]
+     */
     public function getMatches() : array
     {
         return $this->matches;

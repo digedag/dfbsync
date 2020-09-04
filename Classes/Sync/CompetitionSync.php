@@ -5,6 +5,7 @@ namespace System25\T3sports\DfbSync\Sync;
 use System25\T3sports\DfbSync\Xml\MatchTableReader;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
+use PHPUnit\Util\Xml;
 
 /**
  * *************************************************************
@@ -50,11 +51,19 @@ class CompetitionSync
     private $matchMap = [];
     private $pageUid = 0;
     private $stats = [];
-    private $xmlReader;
+    /**
+     * @var MatchTableReader Zugriff auf Spielplan-Xml
+     */
+    private $xmlReaderSchedules;
+    /**
+     * @var MatchTableReader Zugriff auf Spiele-Xml
+     */
+    private $xmlReaderMatches;
 
-    public function doSync($competition, $fileName, &$info)
+    public function doSync($competition, $fileNameSchedules, $fileNameMatches, &$info)
     {
-        $this->xmlReader = new MatchTableReader($fileName);
+        $this->xmlReaderSchedules = new MatchTableReader($fileNameSchedules);
+        $this->xmlReaderMatches = new MatchTableReader($fileNameMatches);
 
         $this->pageUid = $competition->getProperty('pid');
         $this->initMatches($competition);
@@ -76,8 +85,13 @@ class CompetitionSync
             self::TABLE_GAMES => [],
             self::TABLE_COMPETITION => [],
         ];
-        foreach ($this->xmlReader->getMatches() as $paarung) {
+        $results = $this->xmlReaderMatches->getMatches();
+        foreach ($this->xmlReaderSchedules->getMatches() as $id => $paarung) {
             $cnt ++;
+            if (array_key_exists($id, $results)) {
+                // Wenn das Spiel gefunden wird, sind die Daten ggf. aktueller
+                $paarung = $results[$id];
+            }
             try {
                 $this->handleMatch($data, $paarung, $competition, $syncInfo);
                 if ($cnt % 40 == 0) {
@@ -230,9 +244,9 @@ class CompetitionSync
                 'dummy' => 1,
             ];
         }
-        elseif (array_key_exists($extId, $this->xmlReader->getTeams())) {
+        elseif (array_key_exists($extId, $this->xmlReaderSchedules->getTeams())) {
             /* @var $team Team */
-            $team = $this->xmlReader->getTeams()[$extId];
+            $team = $this->xmlReaderSchedules->getTeams()[$extId];
             return [
                 'pid' => $this->pageUid,
                 'extid' => $extId,
@@ -293,7 +307,8 @@ class CompetitionSync
     }
 
     /**
-     * Lädt die vorhandenen Spiele des Wettbewerbs in die matchMap
+     * Lädt die vorhandenen Spiele des Wettbewerbs in die matchMap. Diese
+     * enthält als Key die externe ID des Spiels und als Value die UID.
      *
      * @param \tx_cfcleague_models_Competition $competition
      */

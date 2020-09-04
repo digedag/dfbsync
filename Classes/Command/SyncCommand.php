@@ -35,7 +35,8 @@ class SyncCommand extends Command
     protected function configure()
     {
         $this->setDescription('Sync competition with DFB data source')
-            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Search path for XML files')
+            ->addOption('planpath', 'p', InputOption::VALUE_REQUIRED, 'Search path for saison schedules XML files')
+            ->addOption('resultpath', 'r', InputOption::VALUE_REQUIRED, 'Search path for match results XML files')
             ->addOption('competition', 'c', InputOption::VALUE_OPTIONAL, 'TYPO3 uid of specific competition to sync')
             ->addOption('saison', 's', InputOption::VALUE_REQUIRED, 'UID of current saison');
     }
@@ -53,17 +54,18 @@ class SyncCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $path = $input->getOption('path');
+        $planPath = $input->getOption('planpath');
+        $resultPath = $input->getOption('resultpath');
         $saisonUid = (int) $input->getOption('saison');
         $competitionUid = (int) $input->getOption('competition');
 
-        $isAbs = \tx_rnbase_util_Files::isAbsPath($path);
-        $io->note('Path: '. $path . ': '.($isAbs ? 'Abs' : 'rel'));
+        $io->note('Schedule-Path: '. $planPath . ': '.(\tx_rnbase_util_Files::isAbsPath($planPath) ? 'Abs' : 'rel'));
+        $io->note('Results-Path: '. $resultPath . ': '.(\tx_rnbase_util_Files::isAbsPath($resultPath) ? 'Abs' : 'rel'));
         $io->note('Saison: '. $saisonUid);
         $io->note('Path-site: ' . PATH_site);
 
         $runner = new Runner();
-        $info = $runner->sync($saisonUid, $path, $competitionUid);
+        $info = $runner->sync($saisonUid, $planPath, $resultPath, $competitionUid);
         $io->note(print_r($info, true));
         $io->success('Done');
     }
