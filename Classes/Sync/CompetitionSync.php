@@ -279,7 +279,10 @@ class CompetitionSync
         $dfbStatus = $paarung->getStatus();
         $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_OPEN;
 
-        if ($dfbStatus >= 600) {
+        if ($dfbStatus == 800) {
+            $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_RESCHEDULED;
+        }
+        elseif ($dfbStatus >= 600) {
             $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_FINISHED;
         }
         elseif ($dfbStatus >= 500) {
