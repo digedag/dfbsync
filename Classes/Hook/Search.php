@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Hook;
 
+use Sys25\RnBase\Database\Query\Join;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -39,7 +41,7 @@ class Search
     public function getJoinsCompetition($params, $parent)
     {
         if (isset($params['tableAliases']['DFBSYNC'])) {
-            $params['join'] .= ' LEFT JOIN tx_dfbsync_data DFBSYNC ON DFBSYNC.competition = COMPETITION.uid ';
+            $params['join'][] = new Join('COMPETITION','tx_dfbsync_data', 'DFBSYNC.competition = COMPETITION.uid', 'DFBSYNC');
         }
     }
 }
