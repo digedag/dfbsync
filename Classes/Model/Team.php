@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -27,7 +28,6 @@ namespace System25\T3sports\DfbSync\Model;
  */
 class Team
 {
-
     private $id;
 
     private $clubId;
@@ -45,7 +45,6 @@ class Team
     }
 
     /**
-     *
      * @return string
      */
     public function getId(): string
@@ -54,7 +53,6 @@ class Team
     }
 
     /**
-     *
      * @return mixed
      */
     public function getClubId(): string
@@ -63,7 +61,6 @@ class Team
     }
 
     /**
-     *
      * @return mixed
      */
     public function getName(): string

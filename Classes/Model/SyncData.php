@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -25,7 +26,6 @@ namespace System25\T3sports\DfbSync\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class SyncData extends \Tx_Rnbase_Domain_Model_Base
 {
     public function getTableName()

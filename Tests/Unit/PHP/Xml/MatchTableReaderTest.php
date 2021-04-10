@@ -2,10 +2,10 @@
 
 namespace System25\T3sports\DfbSync\Tests\Scheduler;
 
-use System25\T3sports\DfbSync\Xml\MatchTableReader;
 use System25\T3sports\DfbSync\Model\Kopfdaten;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
+use System25\T3sports\DfbSync\Xml\MatchTableReader;
 
 /***************************************************************
 *  Copyright notice
@@ -55,7 +55,6 @@ class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
         $this->assertEquals('A-Stadion', $match->getStadionName());
         $this->assertEquals(8, $match->getNummer());
         $this->assertEquals(600, $match->getStatus());
-
     }
 
     /**
@@ -111,5 +110,4 @@ class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
     {
         return \tx_rnbase_util_Extensions::extPath('dfbsync').'Tests/Fixtures/'.$filename;
     }
-
 }

@@ -1,15 +1,15 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Sync;
 
-
-use System25\T3sports\DfbSync\Xml\MatchTableReader;
+use PHPUnit\Util\Xml;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
-use PHPUnit\Util\Xml;
+use System25\T3sports\DfbSync\Xml\MatchTableReader;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -31,9 +31,6 @@ use PHPUnit\Util\Xml;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
-/**
- */
 class CompetitionSync
 {
     const TABLE_GAMES = 'tx_cfcleague_games';
@@ -41,12 +38,12 @@ class CompetitionSync
     const TABLE_COMPETITION = 'tx_cfcleague_competition';
 
     /**
-     * Key ist DFB-ID, value ist T3-UID
+     * Key ist DFB-ID, value ist T3-UID.
      */
     private $teamMap = [];
 
     /**
-     * Key ist DFB-ID, value ist T3-UID
+     * Key ist DFB-ID, value ist T3-UID.
      */
     private $matchMap = [];
     private $pageUid = 0;
@@ -68,16 +65,16 @@ class CompetitionSync
         $this->pageUid = $competition->getProperty('pid');
         $this->initMatches($competition);
 
-        $start = microtime(TRUE);
+        $start = microtime(true);
         $cnt = 0;
         $syncInfo = [
             'match' => [
                 'new' => 0,
-                'updated' => 0
+                'updated' => 0,
             ],
             'team' => [
                 'new' => 0,
-                'updated' => 0
+                'updated' => 0,
             ],
         ];
         $data = [
@@ -87,14 +84,14 @@ class CompetitionSync
         ];
         $results = $this->xmlReaderMatches->getMatches();
         foreach ($this->xmlReaderSchedules->getMatches() as $id => $paarung) {
-            $cnt ++;
+            ++$cnt;
             if (array_key_exists($id, $results)) {
                 // Wenn das Spiel gefunden wird, sind die Daten ggf. aktueller
                 $paarung = $results[$id];
             }
             try {
                 $this->handleMatch($data, $paarung, $competition, $syncInfo);
-                if ($cnt % 40 == 0) {
+                if (0 == $cnt % 40) {
                     // Speichern
                     $this->persist($data);
                     // Wettbewerb neu laden, da ggf. neue Teams drin stehen
@@ -102,14 +99,14 @@ class CompetitionSync
                 }
             } catch (\Exception $e) {
                 \tx_rnbase_util_Logger::fatal('Error handle match!', 'dfbsync', [
-                    'msg' => $e->getMessage()
+                    'msg' => $e->getMessage(),
                 ]);
             }
         }
 
         // Die restlichen Spiele speichern
         $this->persist($data);
-        $this->stats['total']['time'] = intval(microtime(true) - $start) . 's';
+        $this->stats['total']['time'] = intval(microtime(true) - $start).'s';
         $this->stats['total']['matches'] = $cnt;
 
         $info['syncinfo'] = $syncInfo;
@@ -117,7 +114,6 @@ class CompetitionSync
     }
 
     /**
-     *
      * @param array $data
      * @param Paarung $paarung
      * @param \tx_cfcleague_models_Competition $competition
@@ -127,19 +123,19 @@ class CompetitionSync
     {
         // Das Spiel suchen und ggf. anlegen
         $extId = $paarung->getId();
-        $matchUid = 'NEW_' . $extId;
+        $matchUid = 'NEW_'.$extId;
         if (array_key_exists($extId, $this->matchMap)) {
             $matchUid = $this->matchMap[$extId];
-            $info['match']['updated'] += 1;
+            ++$info['match']['updated'];
         } else {
-            $info['match']['new'] += 1;
+            ++$info['match']['new'];
         }
 
         $data[self::TABLE_GAMES][$matchUid]['pid'] = $this->pageUid;
         $data[self::TABLE_GAMES][$matchUid]['extid'] = $extId;
         $data[self::TABLE_GAMES][$matchUid]['competition'] = $competition->getUid();
         $data[self::TABLE_GAMES][$matchUid]['round'] = $paarung->getSpieltag();
-        $data[self::TABLE_GAMES][$matchUid]['round_name'] = $paarung->getSpieltag() . '. Spieltag';
+        $data[self::TABLE_GAMES][$matchUid]['round_name'] = $paarung->getSpieltag().'. Spieltag';
         // Es muss ein lokaler Timestamp gesetzt werden
         $kickoff = $paarung->getDatum();
         $data[self::TABLE_GAMES][$matchUid]['date'] = ($kickoff->getTimestamp());
@@ -149,21 +145,21 @@ class CompetitionSync
         $data[self::TABLE_GAMES][$matchUid]['status'] = $this->getMatchStatus($paarung);
         $data[self::TABLE_GAMES][$matchUid]['goals_home_2'] = $paarung->getToreHeim();
         $data[self::TABLE_GAMES][$matchUid]['goals_guest_2'] = $paarung->getToreGast();
-
     }
 
     /**
-     * Liefert die UID des Teams, oder einen NEW_-Key
+     * Liefert die UID des Teams, oder einen NEW_-Key.
      *
      * @param string $extId
      * @param [] $data
      * @param \tx_cfcleague_models_Competition $competition
+     *
      * @return string
      */
     private function findTeam($extId, &$data, $competition)
     {
-        $uid = 'NEW_' . $extId;
-        if (! array_key_exists($extId, $this->teamMap)) {
+        $uid = 'NEW_'.$extId;
+        if (!array_key_exists($extId, $this->teamMap)) {
             // Das Team ist noch nicht im Cache, also in der DB suchen
             /* @var $teamSrv \tx_cfcleague_services_Teams */
             $teamSrv = \tx_cfcleague_util_ServiceRegistry::getTeamService();
@@ -175,15 +171,15 @@ class CompetitionSync
                 $fields['TEAM.DUMMY'][OP_EQ_INT] = 1;
             }
 
-            $options = ['what' => 'uid',];
+            $options = ['what' => 'uid'];
             $ret = $teamSrv->searchTeams($fields, $options);
-            if (! empty($ret)) {
+            if (!empty($ret)) {
                 $this->teamMap[$extId] = $ret[0]['uid'];
                 $uid = $this->teamMap[$extId];
             } else {
                 // In uid steht jetzt NEW_
                 // Team anlegen, falls es noch nicht in der Data-Map liegt
-                if (! array_key_exists($uid, $data[self::TABLE_TEAMS])) {
+                if (!array_key_exists($uid, $data[self::TABLE_TEAMS])) {
                     $data[self::TABLE_TEAMS][$uid] = $this->loadTeamData($extId);
                 }
             }
@@ -192,6 +188,7 @@ class CompetitionSync
         } else {
             $uid = $this->teamMap[$extId];
         }
+
         return $uid;
     }
 
@@ -208,25 +205,24 @@ class CompetitionSync
      */
     private function addTeamToCompetition($teamUid, &$data, $competition)
     {
-        $add = TRUE;
+        $add = true;
         if ($competition->getProperty('teams')) {
             $teamUids = array_flip(\Tx_Rnbase_Utility_Strings::trimExplode(',', $competition->getProperty('teams')));
-            $add = ! (array_key_exists($teamUid, $teamUids));
+            $add = !(array_key_exists($teamUid, $teamUids));
         }
-        if (! $add) {
+        if (!$add) {
             return;
         }
         // Das geht bestimmt auch kürzer...
         // Das Team in den Wettbewerb legen
         if (isset($data[self::TABLE_COMPETITION][$competition->getUid()]['teams'])) {
-            $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] .= ',' . $teamUid;
+            $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] .= ','.$teamUid;
         } else {
             // Das erste Team
             if ($competition->getProperty('teams')) {
                 $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] = $competition->getProperty('teams');
-                $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] .= ',' . $teamUid;
-            }
-            else {
+                $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] .= ','.$teamUid;
+            } else {
                 $data[self::TABLE_COMPETITION][$competition->getUid()]['teams'] = $teamUid;
             }
         }
@@ -243,10 +239,10 @@ class CompetitionSync
                 'short_name' => 'spielfrei',
                 'dummy' => 1,
             ];
-        }
-        elseif (array_key_exists($extId, $this->xmlReaderSchedules->getTeams())) {
+        } elseif (array_key_exists($extId, $this->xmlReaderSchedules->getTeams())) {
             /* @var $team Team */
             $team = $this->xmlReaderSchedules->getTeams()[$extId];
+
             return [
                 'pid' => $this->pageUid,
                 'extid' => $extId,
@@ -255,7 +251,7 @@ class CompetitionSync
                 'short_name' => $team->getName(),
             ];
         }
-        throw new \Exception('Team not found: ' . $extId);
+        throw new \Exception('Team not found: '.$extId);
     }
 
     private function lookupClubUid(Team $team)
@@ -271,6 +267,7 @@ class CompetitionSync
                 $clubUid = $rows[0]->getUid();
             }
         }
+
         return $clubUid;
     }
 
@@ -279,13 +276,11 @@ class CompetitionSync
         $dfbStatus = $paarung->getStatus();
         $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_OPEN;
 
-        if ($dfbStatus == 800) {
+        if (800 == $dfbStatus) {
             $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_RESCHEDULED;
-        }
-        elseif ($dfbStatus >= 600) {
+        } elseif ($dfbStatus >= 600) {
             $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_FINISHED;
-        }
-        elseif ($dfbStatus >= 500) {
+        } elseif ($dfbStatus >= 500) {
             $t3Status = \tx_cfcleague_models_Match::MATCH_STATUS_INVALID;
         }
 
@@ -294,13 +289,13 @@ class CompetitionSync
 
     private function persist(&$data)
     {
-        $start = microtime(TRUE);
+        $start = microtime(true);
 
         $tce = \Tx_Rnbase_Database_Connection::getInstance()->getTCEmain($data);
         $tce->process_datamap();
 
         $this->stats['chunks'][] = [
-            'time' => intval(microtime(true) - $start) . 's',
+            'time' => intval(microtime(true) - $start).'s',
             'matches' => count($data[self::TABLE_GAMES]),
         ];
 
@@ -325,7 +320,7 @@ class CompetitionSync
         $options['orderby'] = 'uid asc';
         $options['callback'] = [
             $this,
-            'cbAddMatch'
+            'cbAddMatch',
         ];
         $matchSrv->search($fields, $options);
     }

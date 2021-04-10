@@ -1,4 +1,5 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Xml;
 
 use System25\T3sports\DfbSync\Model\Kopfdaten;
@@ -7,7 +8,7 @@ use System25\T3sports\DfbSync\Model\Team;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -29,7 +30,6 @@ use System25\T3sports\DfbSync\Model\Team;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class MatchTableReader
 {
     const TAG = 'dfbsync';
@@ -51,17 +51,18 @@ class MatchTableReader
     private function createReader($file)
     {
         $reader = new \XMLReader();
-        if (! $reader->open($file, 'UTF-8', 0)) {
+        if (!$reader->open($file, 'UTF-8', 0)) {
             \tx_rnbase_util_Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
             throw new \Exception(sprintf('Error reading XML file %s', $file));
         }
+
         return $reader;
     }
 
     private function readMatches(\XMLReader $reader)
     {
-        while ($reader->read() && $reader->name !== 'paarung');
-        while ($reader->name === 'paarung') {
+        while ($reader->read() && 'paarung' !== $reader->name);
+        while ('paarung' === $reader->name) {
             $paarung = new Paarung($this->expandNode($reader));
             $this->matches[$paarung->getId()] = $paarung;
             $reader->next('paarung');
@@ -70,8 +71,8 @@ class MatchTableReader
 
     private function readClubs(\XMLReader $reader)
     {
-        while ($reader->read() && $reader->name !== 'verein');
-        while ($reader->name === 'verein') {
+        while ($reader->read() && 'verein' !== $reader->name);
+        while ('verein' === $reader->name) {
             $node = $this->expandNode($reader);
             $teamId = $node->getValueFromPath('mannschaftId');
             $clubId = $node->getValueFromPath('id');
@@ -79,10 +80,11 @@ class MatchTableReader
             $reader->next('verein');
         }
     }
+
     private function readTeams(\XMLReader $reader)
     {
-        while ($reader->read() && $reader->name !== 'paarung');
-        while ($reader->name === 'paarung') {
+        while ($reader->read() && 'paarung' !== $reader->name);
+        while ('paarung' === $reader->name) {
             $node = $this->expandNode($reader);
             $homeId = $node->getValueFromPath('heimmannschaft.id');
             if (!array_key_exists($homeId, $this->teams)) {
@@ -100,49 +102,49 @@ class MatchTableReader
 
     private function readHeader(\XMLReader $reader)
     {
-        while ($reader->read() && $reader->name !== 'kopfdaten');
-        if ($reader->name === 'kopfdaten') {
+        while ($reader->read() && 'kopfdaten' !== $reader->name);
+        if ('kopfdaten' === $reader->name) {
             $node = $this->expandNode($reader);
             $this->kopfdaten = new Kopfdaten($node);
         }
     }
 
-    public function getKopfdaten() : ?Kopfdaten
+    public function getKopfdaten(): ?Kopfdaten
     {
         return $this->kopfdaten;
     }
 
     /**
-     *
      * @return Team[]
      */
-    public function getTeams() : array
+    public function getTeams(): array
     {
         return $this->teams;
     }
 
     /**
-     *
      * @return Paarung[]
      */
-    public function getMatches() : array
+    public function getMatches(): array
     {
         return $this->matches;
     }
 
     /**
-     *
      * @param \XMLReader $reader
+     *
      * @throws \LogicException
+     *
      * @return \tx_rnbase_util_XmlElement
      */
-    private function expandNode(\XMLReader $reader) : \tx_rnbase_util_XmlElement
+    private function expandNode(\XMLReader $reader): \tx_rnbase_util_XmlElement
     {
         $doc = new \DOMDocument();
         $node = $reader->expand();
-        if ($node === FALSE || ! $node instanceof \DOMNode) {
-            throw new \LogicException('The current DOMNode is invalid. Last error: ' . print_r(error_get_last(), true), 1452694257);
+        if (false === $node || !$node instanceof \DOMNode) {
+            throw new \LogicException('The current DOMNode is invalid. Last error: '.print_r(error_get_last(), true), 1452694257);
         }
+
         return simplexml_import_dom($doc->importNode($node, true), 'tx_rnbase_util_XmlElement');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 $_EXTKEY = 'dfbsync';
 
@@ -11,8 +11,8 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cfc_league']['search_Competition_getJoin
 
 // Scheduler für Sync
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\System25\T3sports\DfbSync\Scheduler\SyncTask::class] = [
-    'extension'        => $_EXTKEY,
-    'title'            => '[DFB Sync] Spielplan aktualisieren',
-    'description'      => 'Aktualisiert die Spielpläne des DFB',
-    'additionalFields' => \System25\T3sports\DfbSync\Scheduler\SyncTaskAddFieldProvider::class
+    'extension' => $_EXTKEY,
+    'title' => '[DFB Sync] Spielplan aktualisieren',
+    'description' => 'Aktualisiert die Spielpläne des DFB',
+    'additionalFields' => \System25\T3sports\DfbSync\Scheduler\SyncTaskAddFieldProvider::class,
 ];

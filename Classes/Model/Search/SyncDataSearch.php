@@ -1,11 +1,12 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model\Search;
 
 use System25\T3sports\DfbSync\Model\SyncData;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -27,7 +28,6 @@ use System25\T3sports\DfbSync\Model\SyncData;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class SyncDataSearch extends \tx_rnbase_util_SearchBase
 {
     protected function getBaseTable()
@@ -45,7 +45,6 @@ class SyncDataSearch extends \tx_rnbase_util_SearchBase
         ], $this);
 
         return $tableMapping;
-
     }
 
     protected function getJoins($tableAliases)

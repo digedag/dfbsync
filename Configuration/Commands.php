@@ -9,6 +9,6 @@
  */
 return [
     'dfbsync:sync' => [
-        'class' => \System25\T3sports\DfbSync\Command\SyncCommand::class
+        'class' => \System25\T3sports\DfbSync\Command\SyncCommand::class,
     ],
 ];

@@ -1,11 +1,12 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model\Repository;
 
 use System25\T3sports\DfbSync\Model\Search\SyncDataSearch;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -27,7 +28,6 @@ use System25\T3sports\DfbSync\Model\Search\SyncDataSearch;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class SyncDataRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
 {
     protected function getSearchClass()

@@ -1,12 +1,12 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Scheduler;
 
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
-use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
-
 
 /***************************************************************
  *  Copyright notice
@@ -31,8 +31,6 @@ use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- */
 class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
 {
     const FIELD_SAISON_UID = 'task_dfbsync_saison';
@@ -45,6 +43,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
      * @param array $taskInfo Reference to the array containing the info used in the add/edit form
      * @param AbstractTask|null $task When editing, reference to the current task. NULL when adding.
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     *
      * @return array Array containing all the information pertaining to the additional fields
      */
     public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
@@ -53,14 +52,15 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $additionalFields[self::FIELD_SAISON_UID] = $this->getSaisonField($taskInfo, $task, $schedulerModule);
         $additionalFields[self::FIELD_FILE_MATCHTABLE] = $this->getFileMatchtableField($taskInfo, $task, $schedulerModule);
         $additionalFields[self::FIELD_FILE_RESULTS] = $this->getFileResultsField($taskInfo, $task, $schedulerModule);
+
         return $additionalFields;
     }
 
     /**
-     *
      * @param array $taskInfo Reference to the array containing the info used in the add/edit form
      * @param SyncTask|null $task When editing, reference to the current task. NULL when adding.
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     *
      * @return array Array containing all the information pertaining to the additional fields
      */
     protected function getSaisonField(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
@@ -81,32 +81,33 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         foreach ($saisons as $uid => $saison) {
             if ($currentSchedulerModuleAction->equals(Action::ADD) && empty($options)) {
                 // Select first table by default if adding a new task
-                $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
+                $options[] = '<option value="'.$uid.'" selected="selected">'.$saison->getProperty('name').'</option>';
             } elseif ($task && ($task->getSaisonUid() === $uid)) {
                 // Select currently selected table
-                $options[] = '<option value="' . $uid . '" selected="selected">' . $saison->getProperty('name') . '</option>';
+                $options[] = '<option value="'.$uid.'" selected="selected">'.$saison->getProperty('name').'</option>';
             } else {
-                $options[] = '<option value="' . $uid . '">' . $saison->getProperty('name') . '</option>';
+                $options[] = '<option value="'.$uid.'">'.$saison->getProperty('name').'</option>';
             }
         }
         $fieldName = 'tx_scheduler['.self::FIELD_SAISON_UID.']';
         $fieldId = self::FIELD_SAISON_UID;
         $fieldHtml = [];
         // Add table drop down html
-        $fieldHtml[] = '<select class="form-control" name="' . $fieldName . '" id="' . $fieldId . '">' . implode(LF, $options) . '</select>';
+        $fieldHtml[] = '<select class="form-control" name="'.$fieldName.'" id="'.$fieldId.'">'.implode(LF, $options).'</select>';
         $fieldConfiguration = [
             'code' => implode(LF, $fieldHtml),
             'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_saison',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
+
         return $fieldConfiguration;
     }
 
     /**
-     *
      * @param array $taskInfo Reference to the array containing the info used in the add/edit form
      * @param SyncTask|null $task When editing, reference to the current task. NULL when adding.
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     *
      * @return array Array containing all the information pertaining to the additional fields
      */
     protected function getFileMatchtableField(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
@@ -115,21 +116,22 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         if (empty($taskInfo[$fieldId])) {
             $taskInfo[$fieldId] = $task && $task->getFileMatchtable() ? $task->getFileMatchtable() : '';
         }
-        $fieldName = 'tx_scheduler[' . $fieldId . ']';
-        $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . $taskInfo[$fieldId] . '" ' . 'size="30">';
+        $fieldName = 'tx_scheduler['.$fieldId.']';
+        $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_matchtable',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
+
         return $fieldConfiguration;
     }
 
     /**
-     *
      * @param array $taskInfo Reference to the array containing the info used in the add/edit form
      * @param SyncTask|null $task When editing, reference to the current task. NULL when adding.
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     *
      * @return array Array containing all the information pertaining to the additional fields
      */
     protected function getFileResultsField(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
@@ -138,18 +140,19 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         if (empty($taskInfo[$fieldId])) {
             $taskInfo[$fieldId] = $task && $task->getFileResults() ? $task->getFileResults() : '';
         }
-        $fieldName = 'tx_scheduler[' . $fieldId . ']';
-        $fieldHtml = '<input class="form-control" type="text" ' . 'name="' . $fieldName . '" ' . 'id="' . $fieldId . '" ' . 'value="' . $taskInfo[$fieldId] . '" ' . 'size="30">';
+        $fieldName = 'tx_scheduler['.$fieldId.']';
+        $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_results',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
+
         return $fieldConfiguration;
     }
 
     /**
-     * Save selected backends in task object
+     * Save selected backends in task object.
      *
      * @param array $submittedData Contains data submitted by the user
      * @param SyncTask $task Reference to the current task object
@@ -162,9 +165,9 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
     }
 
     /**
-     *
      * @param array $submittedData Reference to the array containing the data submitted by the user
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
+     *
      * @return bool TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
     public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
@@ -173,7 +176,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
     }
 
     /**
-     * Returns an instance of LanguageService
+     * Returns an instance of LanguageService.
      *
      * @return LanguageService
      */

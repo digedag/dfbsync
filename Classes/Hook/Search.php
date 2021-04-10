@@ -41,7 +41,7 @@ class Search
     public function getJoinsCompetition($params, $parent)
     {
         if (isset($params['tableAliases']['DFBSYNC'])) {
-            $params['join'][] = new Join('COMPETITION','tx_dfbsync_data', 'DFBSYNC.competition = COMPETITION.uid', 'DFBSYNC');
+            $params['join'][] = new Join('COMPETITION', 'tx_dfbsync_data', 'DFBSYNC.competition = COMPETITION.uid', 'DFBSYNC');
         }
     }
 }

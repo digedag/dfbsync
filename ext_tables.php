@@ -1,7 +1,6 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 $_EXTKEY = 'dfbsync';
-

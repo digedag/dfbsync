@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -25,7 +26,6 @@ namespace System25\T3sports\DfbSync\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class Kopfdaten
 {
     private $staffelKennung;
@@ -59,7 +59,7 @@ class Kopfdaten
     /**
      * @return string
      */
-    public function getStaffelKennung() : string
+    public function getStaffelKennung(): string
     {
         return $this->staffelKennung;
     }
@@ -67,7 +67,7 @@ class Kopfdaten
     /**
      * @return string
      */
-    public function getStaffelId() : string
+    public function getStaffelId(): string
     {
         return $this->staffelId;
     }
@@ -75,7 +75,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getStaffelName() : string
+    public function getStaffelName(): string
     {
         return $this->staffelName;
     }
@@ -83,7 +83,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getWettkampfId() : string
+    public function getWettkampfId(): string
     {
         return $this->wettkampfId;
     }
@@ -91,7 +91,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getWettkampfTypId() : string
+    public function getWettkampfTypId(): string
     {
         return $this->wettkampfTypId;
     }
@@ -99,7 +99,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getWettkampfTyp() : string
+    public function getWettkampfTyp(): string
     {
         return $this->wettkampfTyp;
     }
@@ -107,7 +107,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getWettkampfName() : string
+    public function getWettkampfName(): string
     {
         return $this->wettkampfName;
     }
@@ -115,7 +115,7 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getAnzahlMannschaften() : int
+    public function getAnzahlMannschaften(): int
     {
         return $this->anzahlMannschaften;
     }
@@ -123,9 +123,8 @@ class Kopfdaten
     /**
      * @return mixed
      */
-    public function getAnzahlPaarungen() : int
+    public function getAnzahlPaarungen(): int
     {
         return $this->anzahlPaarungen;
     }
-
 }

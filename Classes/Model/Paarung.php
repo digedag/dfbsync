@@ -1,9 +1,10 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Model;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -25,7 +26,6 @@ namespace System25\T3sports\DfbSync\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
 class Paarung
 {
     private $id;
@@ -52,7 +52,7 @@ class Paarung
         $this->status = $node->getIntFromPath('spiel.status.id');
         $tag = $node->getValueFromPath('spiel.datum');
         $zeit = $node->getValueFromPath('spiel.uhrzeit');
-        $this->datum = new \DateTime($tag .' '.$zeit);
+        $this->datum = new \DateTime($tag.' '.$zeit);
         $this->stadionName = $node->getValueFromPath('spielstaette.name');
         $this->heim = $node->getValueFromPath('heimmannschaft.id');
         $this->gast = $node->getValueFromPath('gastmannschaft.id');

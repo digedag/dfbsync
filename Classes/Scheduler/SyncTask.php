@@ -1,12 +1,13 @@
 <?php
+
 namespace System25\T3sports\DfbSync\Scheduler;
 
-use TYPO3\CMS\Scheduler\Task\AbstractTask;
 use System25\T3sports\DfbSync\Sync\Runner;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * *************************************************************
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2020 René Nitzsche <rene@system25.de>
  * All rights reserved
@@ -28,9 +29,6 @@ use System25\T3sports\DfbSync\Sync\Runner;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-
-/**
- */
 class SyncTask extends AbstractTask
 {
     private $saisonUid;
@@ -39,7 +37,7 @@ class SyncTask extends AbstractTask
 
     /**
      * Function executed from the Scheduler.
-     * Sends an email
+     * Sends an email.
      *
      * @return void
      */
@@ -53,11 +51,12 @@ class SyncTask extends AbstractTask
             \tx_rnbase_util_Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
             //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             //also machen wir das manuell
-            if($addr = \tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+            if ($addr = \tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 \tx_rnbase_util_Misc::sendErrorMail($addr, self::class, $e);
             }
             $success = false;
         }
+
         return $success;
     }
 
@@ -109,4 +108,3 @@ class SyncTask extends AbstractTask
         $this->fileResults = $fileResults;
     }
 }
-
