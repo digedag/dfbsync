@@ -23,8 +23,7 @@
 		"issues": "https://github.com/digedag/dfbsync/issues"
 	},
 	"replace": {
-		"typo3-ter/dfbsync": "self.version",
-		"digedag/dfbsync": "self.version"
+		"typo3-ter/dfbsync": "self.version"
 	},
 	"require": {
 		"typo3/cms-core": "^8.7 || ^9.5.17 || ^10.4.3",
