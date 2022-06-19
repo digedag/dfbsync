@@ -3,7 +3,7 @@
 $finder = PhpCsFixer\Finder::create()
     ->exclude('Resources')
     ->exclude('Documentation')
-    ->in(__DIR__)
+    ->in(__DIR__.'/Classes')
 ;
 
 $config = new PhpCsFixer\Config();
