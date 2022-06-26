@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = [
     'description' => 'Import and update competitions from DFB Sportmedia',
     'category' => 'module',
     'shy' => 0,
-    'version' => '1.1.0',
+    'version' => '1.2.0',
     'dependencies' => 'rn_base',
     'module' => 'mod1',
     'state' => 'stable',
@@ -30,7 +30,7 @@ $EM_CONF[$_EXTKEY] = [
         'depends' => [
             'typo3' => '8.7.0-10.4.99',
             'php' => '7.1.0-8.9.99',
-            'rn_base' => '1.12.0-0.0.0',
+            'rn_base' => '1.15.0-0.0.0',
         ],
         'conflicts' => [],
         'suggests' => [],
