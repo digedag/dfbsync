@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Xml;
 
+use Sys25\RnBase\Utility\Logger;
+use Sys25\RnBase\Utility\XmlElement;
 use System25\T3sports\DfbSync\Model\Kopfdaten;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
@@ -32,7 +34,7 @@ use System25\T3sports\DfbSync\Model\Team;
  */
 class MatchTableReader
 {
-    const TAG = 'dfbsync';
+    public const TAG = 'dfbsync';
 
     private $reader;
     private $kopfdaten;
@@ -52,7 +54,7 @@ class MatchTableReader
     {
         $reader = new \XMLReader();
         if (!$reader->open($file, 'UTF-8', 0)) {
-            \tx_rnbase_util_Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
+            Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
             throw new \Exception(sprintf('Error reading XML file %s', $file));
         }
 
@@ -61,7 +63,8 @@ class MatchTableReader
 
     private function readMatches(\XMLReader $reader)
     {
-        while ($reader->read() && 'paarung' !== $reader->name);
+        while ($reader->read() && 'paarung' !== $reader->name) {
+        }
         while ('paarung' === $reader->name) {
             $paarung = new Paarung($this->expandNode($reader));
             $this->matches[$paarung->getId()] = $paarung;
@@ -71,7 +74,8 @@ class MatchTableReader
 
     private function readClubs(\XMLReader $reader)
     {
-        while ($reader->read() && 'verein' !== $reader->name);
+        while ($reader->read() && 'verein' !== $reader->name) {
+        }
         while ('verein' === $reader->name) {
             $node = $this->expandNode($reader);
             $teamId = $node->getValueFromPath('mannschaftId');
@@ -83,7 +87,8 @@ class MatchTableReader
 
     private function readTeams(\XMLReader $reader)
     {
-        while ($reader->read() && 'paarung' !== $reader->name);
+        while ($reader->read() && 'paarung' !== $reader->name) {
+        }
         while ('paarung' === $reader->name) {
             $node = $this->expandNode($reader);
             $homeId = $node->getValueFromPath('heimmannschaft.id');
@@ -102,7 +107,8 @@ class MatchTableReader
 
     private function readHeader(\XMLReader $reader)
     {
-        while ($reader->read() && 'kopfdaten' !== $reader->name);
+        while ($reader->read() && 'kopfdaten' !== $reader->name) {
+        }
         if ('kopfdaten' === $reader->name) {
             $node = $this->expandNode($reader);
             $this->kopfdaten = new Kopfdaten($node);
@@ -135,9 +141,9 @@ class MatchTableReader
      *
      * @throws \LogicException
      *
-     * @return \tx_rnbase_util_XmlElement
+     * @return XmlElement
      */
-    private function expandNode(\XMLReader $reader): \tx_rnbase_util_XmlElement
+    private function expandNode(\XMLReader $reader): XmlElement
     {
         $doc = new \DOMDocument();
         $node = $reader->expand();
@@ -145,6 +151,6 @@ class MatchTableReader
             throw new \LogicException('The current DOMNode is invalid. Last error: '.print_r(error_get_last(), true), 1452694257);
         }
 
-        return simplexml_import_dom($doc->importNode($node, true), 'tx_rnbase_util_XmlElement');
+        return simplexml_import_dom($doc->importNode($node, true), XmlElement::class);
     }
 }

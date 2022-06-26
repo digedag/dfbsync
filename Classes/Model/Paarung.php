@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Model;
 
+use Sys25\RnBase\Utility\XmlElement;
+
 /**
  * *************************************************************
  * Copyright notice.
@@ -39,12 +41,12 @@ class Paarung
     private $toreHeim;
     private $toreGast;
 
-    public function __construct(\tx_rnbase_util_XmlElement $node)
+    public function __construct(XmlElement $node)
     {
         $this->parse($node);
     }
 
-    private function parse(\tx_rnbase_util_XmlElement $node)
+    private function parse(XmlElement $node)
     {
         $this->id = $node->getValueFromPath('spiel.id');
         $this->nummer = $node->getIntFromPath('spiel.nummer');

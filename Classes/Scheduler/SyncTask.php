@@ -2,6 +2,9 @@
 
 namespace System25\T3sports\DfbSync\Scheduler;
 
+use Sys25\RnBase\Configuration\Processor;
+use Sys25\RnBase\Utility\Logger;
+use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\DfbSync\Sync\Runner;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
@@ -48,11 +51,11 @@ class SyncTask extends AbstractTask
             $runner = new Runner();
             $runner->sync($this->getSaisonUid(), $this->getFileMatchtable(), $this->getFileResults());
         } catch (\Exception $e) {
-            \tx_rnbase_util_Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
-            //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
-            //also machen wir das manuell
-            if ($addr = \tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-                \tx_rnbase_util_Misc::sendErrorMail($addr, self::class, $e);
+            Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
+            // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
+            // also machen wir das manuell
+            if ($addr = Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+                Misc::sendErrorMail($addr, self::class, $e);
             }
             $success = false;
         }

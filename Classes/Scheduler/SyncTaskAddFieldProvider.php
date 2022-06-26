@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Scheduler;
 
+use System25\T3sports\Utility\ServiceRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
@@ -33,9 +34,9 @@ use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
 
 class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
 {
-    const FIELD_SAISON_UID = 'task_dfbsync_saison';
-    const FIELD_FILE_MATCHTABLE = 'task_dfbsync_file_matchtable';
-    const FIELD_FILE_RESULTS = 'task_dfbsync_file_results';
+    public const FIELD_SAISON_UID = 'task_dfbsync_saison';
+    public const FIELD_FILE_MATCHTABLE = 'task_dfbsync_file_matchtable';
+    public const FIELD_FILE_RESULTS = 'task_dfbsync_file_results';
 
     /**
      * Add a multi select box with all available cache backends.
@@ -69,7 +70,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
 
         $fields = $options = [];
         $saisons = [];
-        foreach (\tx_cfcleague_util_ServiceRegistry::getSaisonService()->search($fields, $options) as $saison) {
+        foreach (ServiceRegistry::getSaisonService()->search($fields, $options) as $saison) {
             $saisons[$saison->getUid()] = $saison;
         }
         $options = [];

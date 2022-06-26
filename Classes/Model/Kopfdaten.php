@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Model;
 
+use Sys25\RnBase\Utility\XmlElement;
+
 /**
  * *************************************************************
  * Copyright notice.
@@ -38,12 +40,12 @@ class Kopfdaten
     private $anzahlMannschaften;
     private $anzahlPaarungen;
 
-    public function __construct(\tx_rnbase_util_XmlElement $node)
+    public function __construct(XmlElement $node)
     {
         $this->parse($node);
     }
 
-    private function parse(\tx_rnbase_util_XmlElement $node)
+    private function parse(XmlElement $node)
     {
         $this->staffelId = $node->getValueFromPath('staffel.id');
         $this->staffelKennung = $node->getValueFromPath('staffel.kennung');

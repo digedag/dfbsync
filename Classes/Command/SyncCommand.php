@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Sys25\RnBase\Utility\Files;
 use System25\T3sports\DfbSync\Sync\Runner;
 use TYPO3\CMS\Core\Core\Bootstrap;
 
@@ -57,8 +58,8 @@ class SyncCommand extends Command
         $saisonUid = (int) $input->getOption('saison');
         $competitionUid = (int) $input->getOption('competition');
 
-        $io->note('Schedule-Path: '.$planPath.': '.(\tx_rnbase_util_Files::isAbsPath($planPath) ? 'Abs' : 'rel'));
-        $io->note('Results-Path: '.$resultPath.': '.(\tx_rnbase_util_Files::isAbsPath($resultPath) ? 'Abs' : 'rel'));
+        $io->note('Schedule-Path: '.$planPath.': '.(Files::isAbsPath($planPath) ? 'Abs' : 'rel'));
+        $io->note('Results-Path: '.$resultPath.': '.(Files::isAbsPath($resultPath) ? 'Abs' : 'rel'));
         $io->note('Saison: '.$saisonUid);
         $io->note('Path-site: '.PATH_site);
 

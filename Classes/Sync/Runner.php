@@ -2,8 +2,13 @@
 
 namespace System25\T3sports\DfbSync\Sync;
 
+use Sys25\RnBase\Utility\Dates;
+use Sys25\RnBase\Utility\Files;
+use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\DfbSync\Model\Repository\SyncDataRepository;
 use System25\T3sports\DfbSync\Model\SyncData;
+use System25\T3sports\Model\Competition;
+use System25\T3sports\Utility\ServiceRegistry;
 
 /**
  * *************************************************************
@@ -31,10 +36,10 @@ use System25\T3sports\DfbSync\Model\SyncData;
  */
 class Runner
 {
-    const INFO_COMP_FOUND = 'compFound';
-    const INFO_COMP_SYNCED = 'compSynced';
-    const INFO_COMP_FILE = 'compFile';
-    const INFO_RESULT_FILE = 'resultFile';
+    public const INFO_COMP_FOUND = 'compFound';
+    public const INFO_COMP_SYNCED = 'compSynced';
+    public const INFO_COMP_FILE = 'compFile';
+    public const INFO_RESULT_FILE = 'resultFile';
 
     private $sync;
     private $syncRepo;
@@ -81,12 +86,12 @@ class Runner
 
         $this->updateSyncData($competition);
 
-        \tx_rnbase_util_Logger::warn(sprintf('Competition sync executed for UID %d', $competition->getUid()), 'dfbsync', $info);
+        Logger::warn(sprintf('Competition sync executed for UID %d', $competition->getUid()), 'dfbsync', $info);
 
         return $info;
     }
 
-    private function updateSyncData(\tx_cfcleague_models_Competition $competition, $success = true): SyncData
+    private function updateSyncData(Competition $competition, $success = true): SyncData
     {
         $fields = [];
         $fields['SYNCDATA.COMPETITION'][OP_EQ_INT] = $competition->getUid();
@@ -96,14 +101,14 @@ class Runner
             $data->setProperty('competition', $competition->getUid());
             $data->setProperty('pid', $competition->getPid());
         }
-        $data->setProperty('lastsync', \tx_rnbase_util_Dates::datetime_tstamp2mysql(time(), true));
+        $data->setProperty('lastsync', Dates::datetime_tstamp2mysql(time(), true));
         $data->setProperty('success', $success ? 1 : 0);
         $this->syncRepo->persist($data);
 
         return $data;
     }
 
-    private function lookupCompetition(&$info, $saisonUid, $competitionUid): ?\tx_cfcleague_models_Competition
+    private function lookupCompetition(&$info, $saisonUid, $competitionUid): ?Competition
     {
         // Suche nächsten Wettbewerb zum Sync
         $fields = $options = [];
@@ -114,16 +119,16 @@ class Runner
             $fields['COMPETITION.EXTID'][OP_NOTEQ] = '';
             $options['orderby']['DFBSYNC.lastsync'] = 'asc';
         }
-        $compSrv = \tx_cfcleague_util_ServiceRegistry::getCompetitionService();
+        $compSrv = ServiceRegistry::getCompetitionService();
         $comps = $compSrv->search($fields, $options);
         $info[self::INFO_COMP_FOUND] = count($comps);
 
         return !empty($comps) ? $comps[0] : null;
     }
 
-    private function getFileName($fileTemplate, \tx_cfcleague_models_Competition $competition): string
+    private function getFileName($fileTemplate, Competition $competition): string
     {
-        $isAbs = \tx_rnbase_util_Files::isAbsPath($fileTemplate);
+        $isAbs = Files::isAbsPath($fileTemplate);
         $path = $isAbs ? $fileTemplate : PATH_site.$fileTemplate;
 
         return str_replace('${divisionIdentifier}', $competition->getProperty('extid'), $path);

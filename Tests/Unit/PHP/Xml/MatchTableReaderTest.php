@@ -6,6 +6,8 @@ use System25\T3sports\DfbSync\Model\Kopfdaten;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
 use System25\T3sports\DfbSync\Xml\MatchTableReader;
+use Sys25\RnBase\Testing\BaseTestCase;
+use Sys25\RnBase\Utility\Extensions;
 
 /***************************************************************
 *  Copyright notice
@@ -30,7 +32,7 @@ use System25\T3sports\DfbSync\Xml\MatchTableReader;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
+class MatchTableReaderTest extends BaseTestCase
 {
     private $xmlFile;
 
@@ -108,6 +110,6 @@ class MatchTableReaderTest extends \tx_rnbase_tests_BaseTestCase
 
     private function getFixturePath($filename)
     {
-        return \tx_rnbase_util_Extensions::extPath('dfbsync').'Tests/Fixtures/'.$filename;
+        return Extensions::extPath('dfbsync').'Tests/Fixtures/'.$filename;
     }
 }

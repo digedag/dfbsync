@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Tests\Scheduler;
 
+use Sys25\RnBase\Testing\BaseTestCase;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -25,6 +27,6 @@ namespace System25\T3sports\DfbSync\Tests\Scheduler;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class FieldProviderTest extends \tx_rnbase_tests_BaseTestCase
+class FieldProviderTest extends BaseTestCase
 {
 }

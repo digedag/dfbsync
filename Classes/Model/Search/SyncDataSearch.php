@@ -2,6 +2,8 @@
 
 namespace System25\T3sports\DfbSync\Model\Search;
 
+use Sys25\RnBase\Search\SearchBase;
+use Sys25\RnBase\Utility\Misc;
 use System25\T3sports\DfbSync\Model\SyncData;
 
 /**
@@ -28,40 +30,46 @@ use System25\T3sports\DfbSync\Model\SyncData;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-class SyncDataSearch extends \tx_rnbase_util_SearchBase
+class SyncDataSearch extends SearchBase
 {
     protected function getBaseTable()
     {
         return 'tx_dfbsync_data';
     }
 
+    protected function getBaseTableAlias()
+    {
+        return 'SYNCDATA';
+    }
+
     protected function getTableMappings()
     {
         $tableMapping = [];
         $tableMapping['SYNCDATA'] = $this->getBaseTable();
+
         // Hook to append other tables
-        \tx_rnbase_util_Misc::callHook('dfbsync', 'search_SyncData_getTableMapping_hook', [
+        Misc::callHook('dfbsync', 'search_SyncData_getTableMapping_hook', [
             'tableMapping' => &$tableMapping,
         ], $this);
 
         return $tableMapping;
     }
 
+    public function getWrapperClass()
+    {
+        return SyncData::class;
+    }
+
     protected function getJoins($tableAliases)
     {
-        $join = '';
+        $join = [];
 
         // Hook to append other tables
-        \tx_rnbase_util_Misc::callHook('dfbsync', 'search_SyncData_getJoins_hook', [
+        Misc::callHook('dfbsync', 'search_SyncData_getJoins_hook', [
             'join' => &$join,
             'tableAliases' => $tableAliases,
         ], $this);
 
         return $join;
-    }
-
-    public function getWrapperClass()
-    {
-        return SyncData::class;
     }
 }
