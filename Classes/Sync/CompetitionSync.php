@@ -141,7 +141,7 @@ class CompetitionSync
     {
         // Das Spiel suchen und ggf. anlegen
         $extId = $paarung->getId();
-        $matchUid = 'NEW_' . Misc::createHash([$extId], '', false);
+        $matchUid = 'NEW_'.Misc::createHash([$extId], '', false);
         if (array_key_exists($extId, $this->matchMap)) {
             $matchUid = $this->matchMap[$extId];
             ++$info['match']['updated'];
@@ -176,7 +176,7 @@ class CompetitionSync
      */
     private function findTeam($extId, &$data, $competition)
     {
-        $uid = 'NEW_'. Misc::createHash([$extId], '', false);
+        $uid = 'NEW_'.Misc::createHash([$extId], '', false);
         if (!array_key_exists($extId, $this->teamMap)) {
             $fields = [];
             $fields['TEAM.EXTID'][OP_EQ_NOCASE] = $extId;

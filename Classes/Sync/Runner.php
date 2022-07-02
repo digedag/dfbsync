@@ -130,7 +130,7 @@ class Runner
     private function getFileName($fileTemplate, Competition $competition): string
     {
         $isAbs = Files::isAbsPath($fileTemplate);
-        $path = $isAbs ? $fileTemplate : Environment::getPublicPath() . $fileTemplate;
+        $path = $isAbs ? $fileTemplate : Environment::getPublicPath().$fileTemplate;
 
         return str_replace('${divisionIdentifier}', $competition->getProperty('extid'), $path);
     }
