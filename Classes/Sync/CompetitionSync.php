@@ -2,9 +2,9 @@
 
 namespace System25\T3sports\DfbSync\Sync;
 
-use PHPUnit\Util\Xml;
 use Sys25\RnBase\Database\Connection;
 use Sys25\RnBase\Utility\Logger;
+use Sys25\RnBase\Utility\Misc;
 use Sys25\RnBase\Utility\Strings;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
@@ -20,7 +20,7 @@ use System25\T3sports\Utility\ServiceRegistry;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020 René Nitzsche <rene@system25.de>
+ * (c) 2020-2022 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -141,7 +141,7 @@ class CompetitionSync
     {
         // Das Spiel suchen und ggf. anlegen
         $extId = $paarung->getId();
-        $matchUid = 'NEW_'.$extId;
+        $matchUid = 'NEW_' . Misc::createHash([$extId], '', false);
         if (array_key_exists($extId, $this->matchMap)) {
             $matchUid = $this->matchMap[$extId];
             ++$info['match']['updated'];
@@ -176,7 +176,7 @@ class CompetitionSync
      */
     private function findTeam($extId, &$data, $competition)
     {
-        $uid = 'NEW_'.$extId;
+        $uid = 'NEW_'. Misc::createHash([$extId], '', false);
         if (!array_key_exists($extId, $this->teamMap)) {
             $fields = [];
             $fields['TEAM.EXTID'][OP_EQ_NOCASE] = $extId;
@@ -188,8 +188,8 @@ class CompetitionSync
 
             $options = ['what' => 'uid'];
             $ret = $this->teamRepo->search($fields, $options);
-            if (!empty($ret)) {
-                $this->teamMap[$extId] = $ret[0]['uid'];
+            if (!$ret->isEmpty()) {
+                $this->teamMap[$extId] = $ret->first()['uid'];
                 $uid = $this->teamMap[$extId];
             } else {
                 // In uid steht jetzt NEW_
@@ -305,10 +305,8 @@ class CompetitionSync
     private function persist(&$data)
     {
         $start = microtime(true);
-
         $tce = Connection::getInstance()->getTCEmain($data);
         $tce->process_datamap();
-
         $this->stats['chunks'][] = [
             'time' => intval(microtime(true) - $start).'s',
             'matches' => count($data[self::TABLE_GAMES]),

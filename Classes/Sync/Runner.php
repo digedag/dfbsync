@@ -3,6 +3,7 @@
 namespace System25\T3sports\DfbSync\Sync;
 
 use Sys25\RnBase\Utility\Dates;
+use Sys25\RnBase\Utility\Environment;
 use Sys25\RnBase\Utility\Files;
 use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\DfbSync\Model\Repository\SyncDataRepository;
@@ -14,7 +15,7 @@ use System25\T3sports\Utility\ServiceRegistry;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020 René Nitzsche <rene@system25.de>
+ * (c) 2020-2022 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -129,7 +130,7 @@ class Runner
     private function getFileName($fileTemplate, Competition $competition): string
     {
         $isAbs = Files::isAbsPath($fileTemplate);
-        $path = $isAbs ? $fileTemplate : PATH_site.$fileTemplate;
+        $path = $isAbs ? $fileTemplate : Environment::getPublicPath() . $fileTemplate;
 
         return str_replace('${divisionIdentifier}', $competition->getProperty('extid'), $path);
     }
