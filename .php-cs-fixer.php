@@ -12,7 +12,7 @@ return $config->setFinder($finder)
         '@Symfony' => true,
         'phpdoc_align' => false,
         'no_superfluous_phpdoc_tags' => false,
-        'single_line_comment_spacing' => false,
+//        'single_line_comment_spacing' => false,
     ])
     ->setLineEnding("\n")
 ;
