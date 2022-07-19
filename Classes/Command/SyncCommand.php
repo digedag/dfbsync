@@ -62,6 +62,7 @@ class SyncCommand extends Command
         $io->note('Schedule-Path: '.$planPath.': '.(Files::isAbsPath($planPath) ? 'Abs' : 'rel'));
         $io->note('Results-Path: '.$resultPath.': '.(Files::isAbsPath($resultPath) ? 'Abs' : 'rel'));
         $io->note('Saison: '.$saisonUid);
+        $io->note('Competition: '.$competitionUid);
         $io->note('Path-site: '.Environment::getPublicPath());
 
         $runner = new Runner();

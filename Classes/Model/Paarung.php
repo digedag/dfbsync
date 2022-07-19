@@ -56,8 +56,8 @@ class Paarung
         $zeit = $node->getValueFromPath('spiel.uhrzeit');
         $this->datum = new \DateTime($tag.' '.$zeit);
         $this->stadionName = $node->getValueFromPath('spielstaette.name');
-        $this->heim = $node->getValueFromPath('heimmannschaft.id');
-        $this->gast = $node->getValueFromPath('gastmannschaft.id');
+        $this->heim = ''.$node->getValueFromPath('heimmannschaft.id');
+        $this->gast = ''.$node->getValueFromPath('gastmannschaft.id');
         $this->toreHeim = $node->getValueFromPath('ergebnis.heim');
         $this->toreGast = $node->getValueFromPath('ergebnis.gast');
     }

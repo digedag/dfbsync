@@ -90,10 +90,6 @@ class CompetitionSync
                 'new' => 0,
                 'updated' => 0,
             ],
-            'team' => [
-                'new' => 0,
-                'updated' => 0,
-            ],
         ];
         $data = [
             self::TABLE_TEAMS => [],
@@ -187,6 +183,7 @@ class CompetitionSync
             }
 
             $options = ['what' => 'uid'];
+
             $ret = $this->teamRepo->search($fields, $options);
             if (!$ret->isEmpty()) {
                 $this->teamMap[$extId] = $ret->first()['uid'];
