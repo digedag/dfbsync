@@ -10,17 +10,15 @@ use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
 use System25\T3sports\DfbSync\Xml\MatchTableReader;
 use System25\T3sports\Model\Competition;
-use System25\T3sports\Model\Match;
+use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Repository\TeamRepository;
-use System25\T3sports\Service\MatchService;
-use System25\T3sports\Service\TeamService;
 use System25\T3sports\Utility\ServiceRegistry;
 
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020-2022 René Nitzsche <rene@system25.de>
+ * (c) 2020-2023 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -270,7 +268,6 @@ class CompetitionSync
     {
         $clubUid = 0;
         if ($team->getClubId()) {
-            /* @var $clubSrv TeamService */
             $clubSrv = ServiceRegistry::getTeamService();
             $fields = $options = [];
             $fields['CLUB.EXTID'][OP_EQ] = $team->getClubId();
@@ -286,14 +283,14 @@ class CompetitionSync
     private function getMatchStatus(Paarung $paarung)
     {
         $dfbStatus = $paarung->getStatus();
-        $t3Status = Match::MATCH_STATUS_OPEN;
+        $t3Status = Fixture::MATCH_STATUS_OPEN;
 
         if (800 == $dfbStatus) {
-            $t3Status = Match::MATCH_STATUS_RESCHEDULED;
+            $t3Status = Fixture::MATCH_STATUS_RESCHEDULED;
         } elseif ($dfbStatus >= 600) {
-            $t3Status = Match::MATCH_STATUS_FINISHED;
+            $t3Status = Fixture::MATCH_STATUS_FINISHED;
         } elseif ($dfbStatus >= 500) {
-            $t3Status = Match::MATCH_STATUS_INVALID;
+            $t3Status = Fixture::MATCH_STATUS_INVALID;
         }
 
         return $t3Status;
@@ -323,7 +320,6 @@ class CompetitionSync
     private function initMatches(Competition $competition)
     {
         $fields = $options = [];
-        /* @var $matchSrv MatchService */
         $matchSrv = ServiceRegistry::getMatchService();
         $fields['MATCH.COMPETITION'][OP_EQ_INT] = $competition->getUid();
         $options['what'] = 'uid,extid';
