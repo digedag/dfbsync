@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  System25\T3sports\DfbSync\:
+    resource: '../Classes/*'
+
+  System25\T3sports\DfbSync\Command\SyncCommand:
+    tags:
+      - name: 'console.command'
+        command: 'dfbsync:sync'
+        description: 'Sync match schedules'
+        schedulable: true
+        hidden: false

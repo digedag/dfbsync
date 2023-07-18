@@ -69,5 +69,7 @@ class SyncCommand extends Command
         $info = $runner->sync($saisonUid, $planPath, $resultPath, $competitionUid);
         $io->note(print_r($info, true));
         $io->success('Done');
+
+        return self::SUCCESS;
     }
 }
