@@ -69,6 +69,8 @@ class Runner
         ];
         $competition = $this->lookupCompetition($info, $saisonUid, $competitionUid);
         if (!$competition) {
+            Logger::info(sprintf('Competition aborted as no competition was found.'), 'dfbsync', $info);
+
             return $info;
         }
         $info[self::INFO_COMP_SYNCED] = sprintf('%d (%s)', $competition->getUid(), $competition->getName());

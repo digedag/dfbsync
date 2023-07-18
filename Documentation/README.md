@@ -82,7 +82,7 @@ Der Scheduler sucht dann automatisch Wettbewerbe in der angegebenen Saison mit e
 Alternativ zum Scheduler-Task kann die Synchronisation auch per Command ausgeführt werden. Es sind die gleichen Parameter notwendig.
 
 ```
-$ ./vendor/bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionIdentifier}_spielplan.xml -r ../spielplan_\${divisionIdentifier}_ergebnisse.xml
+$ ./bin/typo3 dfbsync:sync -s 2 -p ../spielplan_\${divisionIdentifier}_spielplan.xml -r ../spielplan_\${divisionIdentifier}_ergebnisse.xml
 ```
 
 In diesem Beispiel erfolgt die Synchronisation für Wettbewerbe der Saison mit der UID "2".
