@@ -6,7 +6,7 @@ if (!defined('TYPO3_MODE')) {
 
 $tx_dfbsync_data = [
     'ctrl' => [
-        'title' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:tx_dfbsync_data',
+        'title' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:tx_dfbsync_data',
         'label' => 'competition',
         'searchFields' => 'uid',
         'tstamp' => 'tstamp',
@@ -23,7 +23,7 @@ $tx_dfbsync_data = [
     'columns' => [
         'competition' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xml:tx_cfcleague_games.competition',
+            'label' => 'LLL:EXT:cfc_league/Resources/Private/Language/locallang_db.xlf:tx_cfcleague_games.competition',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -39,7 +39,7 @@ $tx_dfbsync_data = [
         ],
         'lastsync' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:tx_dfbsync_data_lastsync',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:tx_dfbsync_data_lastsync',
             'config' => [
                 'type' => 'input',
                 'size' => '10',
@@ -49,7 +49,7 @@ $tx_dfbsync_data = [
         ],
         'success' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:tx_dfbsync_data_success',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:tx_dfbsync_data_success',
             'config' => [
                 'type' => 'check',
                 'default' => '0',

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" data="2023-07-18T15-28-18" product-name="zsb">
+		<header/>
+		<body>
+			<trans-unit id="label_scheduler_file_matchtable" xml:space="preserve">
+				<source>Path of matchtable file with pattern (some/saison/staffel_${divisionIdentifier}.xml)</source>
+				<target>Pfad der Spielplan-Datei des DFB mit Platzhalter (zur/saison/staffel_${divisionIdentifier}.xml)</target>
+			</trans-unit>
+			<trans-unit id="label_scheduler_file_results" xml:space="preserve">
+				<source>Path of results file with pattern (some/saison/staffel_${divisionIdentifier}_results.xml)</source>
+				<target>Pfad der Ergebnis-Datei des DFB mit Platzhalter (zur/saison/staffel_${divisionIdentifier}_results.xml)</target>
+			</trans-unit>
+			<trans-unit id="label_scheduler_saison" xml:space="preserve">
+				<source>Saison to sync</source>
+				<target>Saison</target>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data" xml:space="preserve">
+				<source>DFB sync data</source>
+				<target>DFB Syncdaten</target>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data_lastsync" xml:space="preserve">
+				<source>Last sync time</source>
+				<target>Letzte Synchronisation</target>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data_success" xml:space="preserve">
+				<source>Last sync successful</source>
+				<target>Letzte Synchronisation erfolgreich</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

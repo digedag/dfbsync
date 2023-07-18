@@ -97,7 +97,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $fieldHtml[] = '<select class="form-control" name="'.$fieldName.'" id="'.$fieldId.'">'.implode(LF, $options).'</select>';
         $fieldConfiguration = [
             'code' => implode(LF, $fieldHtml),
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_saison',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:label_scheduler_saison',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
 
@@ -121,7 +121,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_matchtable',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:label_scheduler_file_matchtable',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
 
@@ -145,7 +145,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
-            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xml:label_scheduler_file_results',
+            'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:label_scheduler_file_results',
             'cshKey' => '_MOD_system_txschedulerM1',
         ];
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" data="2023-07-18T15-28-18" product-name="zsb">
+		<header/>
+		<body>
+			<trans-unit id="label_scheduler_file_matchtable" xml:space="preserve">
+				<source>Path of matchtable file with pattern (some/saison/staffel_${divisionIdentifier}.xml)</source>
+			</trans-unit>
+			<trans-unit id="label_scheduler_file_results" xml:space="preserve">
+				<source>Path of results file with pattern (some/saison/staffel_${divisionIdentifier}_results.xml)</source>
+			</trans-unit>
+			<trans-unit id="label_scheduler_saison" xml:space="preserve">
+				<source>Saison to sync</source>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data" xml:space="preserve">
+				<source>DFB sync data</source>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data_lastsync" xml:space="preserve">
+				<source>Last sync time</source>
+			</trans-unit>
+			<trans-unit id="tx_dfbsync_data_success" xml:space="preserve">
+				<source>Last sync successful</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
