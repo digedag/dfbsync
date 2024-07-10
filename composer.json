@@ -26,7 +26,7 @@
 		"typo3-ter/dfbsync": "self.version"
 	},
 	"require": {
-		"typo3/cms-core": "^8.7 || ^9.5.17 || ^10.4.3 || ^11.5.0 || ^12.4",
+		"typo3/cms-core": "^9.5.17 || ^10.4.3 || ^11.5.0 || ^12.4",
 		"digedag/rn-base": "^1.18.0",
 		"digedag/cfc-league": "^1.11.4"
 	},
