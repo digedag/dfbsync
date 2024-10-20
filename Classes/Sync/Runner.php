@@ -2,12 +2,13 @@
 
 namespace System25\T3sports\DfbSync\Sync;
 
+use Exception;
 use Sys25\RnBase\Utility\Dates;
 use Sys25\RnBase\Utility\Environment;
 use Sys25\RnBase\Utility\Files;
 use Sys25\RnBase\Utility\Logger;
-use System25\T3sports\DfbSync\Model\Repository\SyncDataRepository;
 use System25\T3sports\DfbSync\Model\SyncData;
+use System25\T3sports\DfbSync\Repository\SyncDataRepository;
 use System25\T3sports\Model\Competition;
 use System25\T3sports\Utility\ServiceRegistry;
 
@@ -15,7 +16,7 @@ use System25\T3sports\Utility\ServiceRegistry;
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020-2022 René Nitzsche <rene@system25.de>
+ * (c) 2020-2024 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,10 +46,10 @@ class Runner
     private $sync;
     private $syncRepo;
 
-    public function __construct()
+    public function __construct(CompetitionSync $sync = null, SyncDataRepository $syncDataRepo = null)
     {
-        $this->sync = new CompetitionSync();
-        $this->syncRepo = new SyncDataRepository();
+        $this->sync = $sync ?: new CompetitionSync();
+        $this->syncRepo = $syncDataRepo ?: new SyncDataRepository();
     }
 
     /**
@@ -57,9 +58,8 @@ class Runner
      * @param string $resultFile Ergebnisdatei
      * @param int $competitionUid
      *
-     * @throws \Exception
-     *
      * @return array
+     * @throws Exception
      */
     public function sync(int $saisonUid, $scheduleFile, $resultFile, int $competitionUid = 0): array
     {
@@ -82,7 +82,7 @@ class Runner
 
         try {
             $this->sync->doSync($competition, $scheduleFileName, $resultFileName, $info);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->updateSyncData($competition, false);
             throw $e;
         }
