@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Model;
 
+use DateTime;
 use Sys25\RnBase\Utility\XmlElement;
 
 /**
@@ -54,7 +55,7 @@ class Paarung
         $this->status = $node->getIntFromPath('spiel.status.id');
         $tag = $node->getValueFromPath('spiel.datum');
         $zeit = $node->getValueFromPath('spiel.uhrzeit');
-        $this->datum = new \DateTime($tag.' '.$zeit);
+        $this->datum = new DateTime($tag.' '.$zeit);
         $this->stadionName = $node->getValueFromPath('spielstaette.name');
         $this->heim = ''.$node->getValueFromPath('heimmannschaft.id');
         $this->gast = ''.$node->getValueFromPath('gastmannschaft.id');
@@ -95,7 +96,7 @@ class Paarung
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDatum()
     {

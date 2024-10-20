@@ -2,11 +2,13 @@
 
 namespace System25\T3sports\DfbSync\Model;
 
+use Sys25\RnBase\Domain\Model\BaseModel;
+
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020 René Nitzsche <rene@system25.de>
+ * (c) 2020-2024 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +28,7 @@ namespace System25\T3sports\DfbSync\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-class SyncData extends \Tx_Rnbase_Domain_Model_Base
+class SyncData extends BaseModel
 {
     public function getTableName()
     {

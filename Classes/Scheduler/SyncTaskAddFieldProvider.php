@@ -118,7 +118,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             $taskInfo[$fieldId] = $task && $task->getFileMatchtable() ? $task->getFileMatchtable() : '';
         }
         $fieldName = 'tx_scheduler['.$fieldId.']';
-        $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
+        $fieldHtml = '<input class="form-control" type="text" name="'.$fieldName.'" id="'.$fieldId.'" value="'.$taskInfo[$fieldId].'" size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:label_scheduler_file_matchtable',
@@ -142,7 +142,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             $taskInfo[$fieldId] = $task && $task->getFileResults() ? $task->getFileResults() : '';
         }
         $fieldName = 'tx_scheduler['.$fieldId.']';
-        $fieldHtml = '<input class="form-control" type="text" '.'name="'.$fieldName.'" '.'id="'.$fieldId.'" '.'value="'.$taskInfo[$fieldId].'" '.'size="30">';
+        $fieldHtml = '<input class="form-control" type="text" name="'.$fieldName.'" id="'.$fieldId.'" value="'.$taskInfo[$fieldId].'" size="30">';
         $fieldConfiguration = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:dfbsync/Resources/Private/Language/locallang_db.xlf:label_scheduler_file_results',

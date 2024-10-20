@@ -1,14 +1,15 @@
 <?php
 
-namespace System25\T3sports\DfbSync\Model\Repository;
+namespace System25\T3sports\DfbSync\Repository;
 
+use Sys25\RnBase\Domain\Repository\PersistenceRepository;
 use System25\T3sports\DfbSync\Model\Search\SyncDataSearch;
 
 /**
  * *************************************************************
  * Copyright notice.
  *
- * (c) 2020 René Nitzsche <rene@system25.de>
+ * (c) 2020-2024 René Nitzsche <rene@system25.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,7 +29,7 @@ use System25\T3sports\DfbSync\Model\Search\SyncDataSearch;
  * This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
  */
-class SyncDataRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
+class SyncDataRepository extends PersistenceRepository
 {
     protected function getSearchClass()
     {

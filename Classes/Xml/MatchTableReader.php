@@ -2,11 +2,16 @@
 
 namespace System25\T3sports\DfbSync\Xml;
 
+use DOMDocument;
+use DOMNode;
+use Exception;
+use LogicException;
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\XmlElement;
 use System25\T3sports\DfbSync\Model\Kopfdaten;
 use System25\T3sports\DfbSync\Model\Paarung;
 use System25\T3sports\DfbSync\Model\Team;
+use XMLReader;
 
 /**
  * *************************************************************
@@ -52,20 +57,20 @@ class MatchTableReader
 
     private function createReader($file)
     {
-        $reader = new \XMLReader();
+        $reader = new XMLReader();
         if (!file_exists($file)) {
             Logger::fatal('Missing schedule xml file %s!', self::TAG, $file);
-            throw new \Exception(sprintf('Missing XML file %s', $file));
+            throw new Exception(sprintf('Missing XML file %s', $file));
         }
         if (!$reader->open($file, 'UTF-8', 0)) {
             Logger::fatal('Error reading match schedule xml string!', self::TAG, $file);
-            throw new \Exception(sprintf('Error reading XML file %s', $file));
+            throw new Exception(sprintf('Error reading XML file %s', $file));
         }
 
         return $reader;
     }
 
-    private function readMatches(\XMLReader $reader)
+    private function readMatches(XMLReader $reader)
     {
         while ($reader->read() && 'paarung' !== $reader->name) {
         }
@@ -76,7 +81,7 @@ class MatchTableReader
         }
     }
 
-    private function readClubs(\XMLReader $reader)
+    private function readClubs(XMLReader $reader)
     {
         while ($reader->read() && 'verein' !== $reader->name) {
         }
@@ -89,7 +94,7 @@ class MatchTableReader
         }
     }
 
-    private function readTeams(\XMLReader $reader)
+    private function readTeams(XMLReader $reader)
     {
         while ($reader->read() && 'paarung' !== $reader->name) {
         }
@@ -109,7 +114,7 @@ class MatchTableReader
         }
     }
 
-    private function readHeader(\XMLReader $reader)
+    private function readHeader(XMLReader $reader)
     {
         while ($reader->read() && 'kopfdaten' !== $reader->name) {
         }
@@ -141,18 +146,17 @@ class MatchTableReader
     }
 
     /**
-     * @param \XMLReader $reader
-     *
-     * @throws \LogicException
+     * @param XMLReader $reader
      *
      * @return XmlElement
+     * @throws LogicException
      */
-    private function expandNode(\XMLReader $reader): XmlElement
+    private function expandNode(XMLReader $reader): XmlElement
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $node = $reader->expand();
-        if (false === $node || !$node instanceof \DOMNode) {
-            throw new \LogicException('The current DOMNode is invalid. Last error: '.print_r(error_get_last(), true), 1452694257);
+        if (false === $node || !$node instanceof DOMNode) {
+            throw new LogicException('The current DOMNode is invalid. Last error: '.print_r(error_get_last(), true), 1452694257);
         }
 
         return simplexml_import_dom($doc->importNode($node, true), XmlElement::class);

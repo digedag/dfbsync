@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Sync;
 
+use Exception;
 use Sys25\RnBase\Database\Connection;
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
@@ -110,7 +111,7 @@ class CompetitionSync
                     // Wettbewerb neu laden, da ggf. neue Teams drin stehen
                     $competition->reset();
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Logger::fatal('Error handle match!', 'dfbsync', [
                     'msg' => $e->getMessage(),
                 ]);
@@ -155,7 +156,6 @@ class CompetitionSync
                 'goals_home_2' => $paarung->getToreHeim(),
                 'goals_guest_2' => $paarung->getToreGast(),
             ];
-            $data[self::TABLE_GAMES][$matchUid] = $fixture;
 
             if (array_key_exists($extId, $this->matchMap)) {
                 $matchUid = $this->matchMap[$extId];
@@ -163,8 +163,8 @@ class CompetitionSync
             } else {
                 ++$info['match']['new'];
             }
-    
-        } catch(Throwable $e) {
+            $data[self::TABLE_GAMES][$matchUid] = $fixture;
+        } catch (Throwable $e) {
             $info['error'][] = [
                 'msg' => $e->getMessage(),
                 'fixtureId' => $extId,
@@ -282,7 +282,7 @@ class CompetitionSync
                 'short_name' => $team->getName(),
             ];
         }
-        throw new \Exception('Team not found: '.$extId);
+        throw new Exception('Team not found: '.$extId);
     }
 
     private function lookupClubUid(Team $team)

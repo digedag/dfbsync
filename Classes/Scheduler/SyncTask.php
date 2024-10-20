@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Scheduler;
 
+use Exception;
 use Sys25\RnBase\Configuration\Processor;
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
@@ -50,7 +51,7 @@ class SyncTask extends AbstractTask
         try {
             $runner = new Runner();
             $runner->sync($this->getSaisonUid(), $this->getFileMatchtable(), $this->getFileResults());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Logger::fatal('Task failed!', 'dfbsync', ['Exception' => $e->getMessage()]);
             // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             // also machen wir das manuell
