@@ -46,7 +46,7 @@ class Runner
     private $sync;
     private $syncRepo;
 
-    public function __construct(CompetitionSync $sync = null, SyncDataRepository $syncDataRepo = null)
+    public function __construct(?CompetitionSync $sync = null, ?SyncDataRepository $syncDataRepo = null)
     {
         $this->sync = $sync ?: new CompetitionSync();
         $this->syncRepo = $syncDataRepo ?: new SyncDataRepository();
