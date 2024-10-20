@@ -22,6 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Sys25\RnBase\Utility\Environment;
 use Sys25\RnBase\Utility\Files;
 use System25\T3sports\DfbSync\Sync\Runner;
+use Throwable;
 use TYPO3\CMS\Core\Core\Bootstrap;
 
 /**
@@ -66,8 +67,13 @@ class SyncCommand extends Command
         $io->note('Path-site: '.Environment::getPublicPath());
 
         $runner = new Runner();
-        $info = $runner->sync($saisonUid, $planPath, $resultPath, $competitionUid);
-        $io->note(print_r($info, true));
+        try {
+            $info = $runner->sync($saisonUid, $planPath, $resultPath, $competitionUid);
+            $io->note(print_r($info, true));
+        } catch (Throwable $e) {
+            $io->error('Command failed '.$e->getMessage());
+            $io->error($e->getTraceAsString());
+        }
         $io->success('Done');
 
         return self::SUCCESS;

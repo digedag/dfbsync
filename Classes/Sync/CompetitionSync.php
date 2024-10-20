@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Sync;
 
+use Exception;
 use Sys25\RnBase\Database\Connection;
 use Sys25\RnBase\Utility\Logger;
 use Sys25\RnBase\Utility\Misc;
@@ -13,6 +14,7 @@ use System25\T3sports\Model\Competition;
 use System25\T3sports\Model\Fixture;
 use System25\T3sports\Model\Repository\TeamRepository;
 use System25\T3sports\Utility\ServiceRegistry;
+use Throwable;
 
 /**
  * *************************************************************
@@ -68,7 +70,7 @@ class CompetitionSync
      */
     private $teamRepo;
 
-    public function __construct(TeamRepository $teamRepo = null)
+    public function __construct(?TeamRepository $teamRepo = null)
     {
         $this->teamRepo = $teamRepo ?: new TeamRepository();
     }
@@ -109,7 +111,7 @@ class CompetitionSync
                     // Wettbewerb neu laden, da ggf. neue Teams drin stehen
                     $competition->reset();
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Logger::fatal('Error handle match!', 'dfbsync', [
                     'msg' => $e->getMessage(),
                 ]);
@@ -136,27 +138,46 @@ class CompetitionSync
         // Das Spiel suchen und ggf. anlegen
         $extId = $paarung->getId();
         $matchUid = 'NEW_'.Misc::createHash([$extId], '', false);
-        if (array_key_exists($extId, $this->matchMap)) {
-            $matchUid = $this->matchMap[$extId];
-            ++$info['match']['updated'];
-        } else {
-            ++$info['match']['new'];
-        }
 
-        $data[self::TABLE_GAMES][$matchUid]['pid'] = $this->pageUid;
-        $data[self::TABLE_GAMES][$matchUid]['extid'] = $extId;
-        $data[self::TABLE_GAMES][$matchUid]['competition'] = $competition->getUid();
-        $data[self::TABLE_GAMES][$matchUid]['round'] = $paarung->getSpieltag();
-        $data[self::TABLE_GAMES][$matchUid]['round_name'] = $paarung->getSpieltag().'. Spieltag';
         // Es muss ein lokaler Timestamp gesetzt werden
         $kickoff = $paarung->getDatum();
-        $data[self::TABLE_GAMES][$matchUid]['date'] = $kickoff->getTimestamp();
-        $data[self::TABLE_GAMES][$matchUid]['stadium'] = $paarung->getStadionName();
-        $data[self::TABLE_GAMES][$matchUid]['home'] = $this->findTeam($paarung->getHeim(), $data, $competition);
-        $data[self::TABLE_GAMES][$matchUid]['guest'] = $this->findTeam($paarung->getGast(), $data, $competition);
-        $data[self::TABLE_GAMES][$matchUid]['status'] = $this->getMatchStatus($paarung);
-        $data[self::TABLE_GAMES][$matchUid]['goals_home_2'] = $paarung->getToreHeim();
-        $data[self::TABLE_GAMES][$matchUid]['goals_guest_2'] = $paarung->getToreGast();
+        try {
+            $fixture = [
+                'pid' => $this->pageUid,
+                'extid' => $extId,
+                'competition' => $competition->getUid(),
+                'round' => $paarung->getSpieltag(),
+                'round_name' => $paarung->getSpieltag().'. Spieltag',
+                'date' => $kickoff->getTimestamp(),
+                'stadium' => $paarung->getStadionName(),
+                'home' => $this->findTeam($paarung->getHeim(), $data, $competition),
+                'guest' => $this->findTeam($paarung->getGast(), $data, $competition),
+                'status' => $this->getMatchStatus($paarung),
+                'goals_home_2' => $paarung->getToreHeim(),
+                'goals_guest_2' => $paarung->getToreGast(),
+            ];
+
+            if (array_key_exists($extId, $this->matchMap)) {
+                $matchUid = $this->matchMap[$extId];
+                ++$info['match']['updated'];
+            } else {
+                ++$info['match']['new'];
+            }
+            $data[self::TABLE_GAMES][$matchUid] = $fixture;
+        } catch (Throwable $e) {
+            $info['error'][] = [
+                'msg' => $e->getMessage(),
+                'fixtureId' => $extId,
+                'home' => $paarung->getHeim(),
+                'guest' => $paarung->getGast(),
+            ];
+            Logger::fatal('Failed to collect fixture data!', 'dfbsync', [
+                'msg' => $e->getMessage(),
+                'fixtureId' => $extId,
+                'home' => $paarung->getHeim(),
+                'guest' => $paarung->getGast(),
+            ]);
+        }
     }
 
     /**
@@ -261,7 +282,7 @@ class CompetitionSync
                 'short_name' => $team->getName(),
             ];
         }
-        throw new \Exception('Team not found: '.$extId);
+        throw new Exception('Team not found: '.$extId);
     }
 
     private function lookupClubUid(Team $team)
