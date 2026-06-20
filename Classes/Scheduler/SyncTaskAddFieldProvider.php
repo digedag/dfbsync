@@ -2,6 +2,7 @@
 
 namespace System25\T3sports\DfbSync\Scheduler;
 
+use Sys25\RnBase\Utility\TYPO3;
 use System25\T3sports\Utility\ServiceRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
@@ -12,7 +13,7 @@ use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2020 René Nitzsche <rene@system25.de>
+ *  (c) 2020-2026 René Nitzsche <rene@system25.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -80,7 +81,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
             $options[] = '<option value="" selected="selected"></option>';
         }
         foreach ($saisons as $uid => $saison) {
-            if ($currentSchedulerModuleAction->equals(Action::ADD) && empty($options)) {
+            if ($this->isActionAdd($currentSchedulerModuleAction) && empty($options)) {
                 // Select first table by default if adding a new task
                 $options[] = '<option value="'.$uid.'" selected="selected">'.$saison->getProperty('name').'</option>';
             } elseif ($task && ($task->getSaisonUid() === $uid)) {
@@ -102,6 +103,15 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         ];
 
         return $fieldConfiguration;
+    }
+
+    private function isActionAdd($current): bool
+    {
+        if (!TYPO3::isTYPO130OrHigher()) {
+            return $current->equals(Action::ADD);
+        }
+
+        return \TYPO3\CMS\Scheduler\SchedulerManagementAction::ADD === $current;
     }
 
     /**
