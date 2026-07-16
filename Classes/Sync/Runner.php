@@ -61,7 +61,7 @@ class Runner
      * @return array
      * @throws Exception
      */
-    public function sync(int $saisonUid, $scheduleFile, $resultFile, int $competitionUid = 0): array
+    public function sync(int $saisonUid, string $scheduleFile, string $resultFile, int $competitionUid = 0): array
     {
         $info = [
             self::INFO_COMP_FOUND => 0,
@@ -129,7 +129,7 @@ class Runner
         return !empty($comps) ? $comps[0] : null;
     }
 
-    private function getFileName($fileTemplate, Competition $competition): string
+    private function getFileName(string $fileTemplate, Competition $competition): string
     {
         $isAbs = Files::isAbsPath($fileTemplate);
         $path = $isAbs ? $fileTemplate : Environment::getPublicPath().$fileTemplate;

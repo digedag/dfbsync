@@ -59,6 +59,11 @@ class SyncCommand extends Command
         $resultPath = $input->getOption('resultpath');
         $saisonUid = (int) $input->getOption('saison');
         $competitionUid = (int) $input->getOption('competition');
+        if (!$planPath || !$resultPath) {
+            $io->error('Options planpath and resultpath are required');
+
+            return self::INVALID;
+        }
 
         $io->note('Schedule-Path: '.$planPath.': '.(Files::isAbsPath($planPath) ? 'Abs' : 'rel'));
         $io->note('Results-Path: '.$resultPath.': '.(Files::isAbsPath($resultPath) ? 'Abs' : 'rel'));
