@@ -54,8 +54,10 @@
 		"preferred-install": {
 			"typo3/cms": "source"
 		},
-		"audit": {
-			"block-insecure": false
+		"policy": {
+			"advisories": {
+				"block": false
+			}
 		},
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
