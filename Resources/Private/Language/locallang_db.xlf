@@ -12,6 +12,9 @@
 			<trans-unit id="label_scheduler_saison" xml:space="preserve">
 				<source>Saison to sync</source>
 			</trans-unit>
+			<trans-unit id="label_no_scheduler_found" xml:space="preserve">
+				<source>No scheduler for dfbsync found.</source>
+			</trans-unit>
 			<trans-unit id="tx_dfbsync_data" xml:space="preserve">
 				<source>DFB sync data</source>
 			</trans-unit>
@@ -20,6 +23,10 @@
 			</trans-unit>
 			<trans-unit id="tx_dfbsync_data_success" xml:space="preserve">
 				<source>Last sync successful</source>
+			</trans-unit>
+
+			<trans-unit id="tx_dfbsync_module_name" xml:space="preserve">
+				<source>DFB Sync</source>
 			</trans-unit>
 		</body>
 	</file>
