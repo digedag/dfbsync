@@ -70,6 +70,7 @@ class SyncTaskAddFieldProvider extends AbstractAdditionalFieldProvider
         $currentSchedulerModuleAction = $schedulerModule->getCurrentAction();
 
         $fields = $options = [];
+        $options['orderby']['SAISON.NAME'] = 'desc';
         $saisons = [];
         foreach (ServiceRegistry::getSaisonService()->search($fields, $options) as $saison) {
             $saisons[$saison->getUid()] = $saison;

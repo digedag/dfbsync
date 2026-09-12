@@ -4,7 +4,6 @@ namespace System25\T3sports\DfbSync\Sync;
 
 use Exception;
 use Sys25\RnBase\Utility\Dates;
-use Sys25\RnBase\Utility\Environment;
 use Sys25\RnBase\Utility\Files;
 use Sys25\RnBase\Utility\Logger;
 use System25\T3sports\DfbSync\Model\SyncData;
@@ -67,9 +66,10 @@ class Runner
             self::INFO_COMP_FOUND => 0,
             self::INFO_COMP_SYNCED => 0,
         ];
+
         $competition = $this->lookupCompetition($info, $saisonUid, $competitionUid);
         if (!$competition) {
-            Logger::info(sprintf('Competition aborted as no competition was found.'), 'dfbsync', $info);
+            Logger::info(sprintf('Sync aborted as no competition was found.'), 'dfbsync', $info);
 
             return $info;
         }
@@ -114,7 +114,9 @@ class Runner
     private function lookupCompetition(&$info, $saisonUid, $competitionUid): ?Competition
     {
         // Suche nächsten Wettbewerb zum Sync
-        $fields = $options = [];
+        // Das ist der Wettbewerb, der das älteste Sync-Datum hat.
+        $fields = [];
+        $options = [];
         if ($competitionUid) {
             $fields['COMPETITION.UID'][OP_EQ_INT] = $competitionUid;
         } else {
@@ -131,8 +133,9 @@ class Runner
 
     private function getFileName(string $fileTemplate, Competition $competition): string
     {
+        $varPath = \TYPO3\CMS\Core\Core\Environment::getVarPath();
         $isAbs = Files::isAbsPath($fileTemplate);
-        $path = $isAbs ? $fileTemplate : Environment::getPublicPath().$fileTemplate;
+        $path = $isAbs ? $fileTemplate : $varPath.'/'.$fileTemplate;
 
         return str_replace('${divisionIdentifier}', $competition->getProperty('extid'), $path);
     }

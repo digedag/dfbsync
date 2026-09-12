@@ -33,6 +33,8 @@ some/folder/${season}/staffel_${divisionIdentifier}_ergebnisse
 
 Der **divisionIdentifier** ist die Staffelkennung. Diese ID ist NICHT eineindeutig. Sie wird also über mehrere Jahre für die gleiche Staffel verwendet. Im XML des Spielplans entspricht die **divisionIdentifier** dem Attribut **kennung** im Tag `kopfdaten->staffel`.
 
+Man kann entweder absolute oder relative Pfade konfigurieren (also mit oder ohne führenden "/"). Bei relativer Pfadangabe wird das Verzeichnis ausgehend vom TYPO3 Ordner "var/" gesucht.
+
 ### Vorarbeiten in TYPO3
 
 #### Wettbewerbe erstellen

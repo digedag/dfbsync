@@ -44,6 +44,7 @@ class MatchTableReader
     private $reader;
     private $kopfdaten;
     private $clubs = [];
+    private $clubNames = [];
     private $teams = [];
     private $matches = [];
 
@@ -90,6 +91,7 @@ class MatchTableReader
             $teamId = $node->getValueFromPath('mannschaftId');
             $clubId = $node->getValueFromPath('id');
             $this->clubs[$teamId] = $clubId;
+            $this->clubNames[$teamId] = (string) $node;
             $reader->next('verein');
         }
     }
@@ -135,6 +137,14 @@ class MatchTableReader
     public function getTeams(): array
     {
         return $this->teams;
+    }
+
+    /**
+     * @return string[] Indexed by DFB team identifier
+     */
+    public function getClubNames(): array
+    {
+        return $this->clubNames;
     }
 
     /**

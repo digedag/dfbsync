@@ -1,0 +1,16 @@
+
+##############################
+# Achtung: im BE können keine Referenzen verwendet werden. Die Werte also immmer kopieren!!				
+##############################
+
+
+mod {
+	cfc_league {
+		funcdfbsync {
+			template = EXT:dfbsync/Resources/Private/Templates/modTemplate.html
+		}
+		languagefiles {
+			dfbsync = EXT:dfbsync/Resources/Private/Language/locallang_db.xlf
+		}
+	}
+}

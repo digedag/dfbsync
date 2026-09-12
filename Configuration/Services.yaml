@@ -14,3 +14,8 @@ services:
         description: 'Sync match schedules'
         schedulable: true
         hidden: false
+
+  System25\T3sports\DfbSync\Sync\Runner:
+    public: true
+  System25\T3sports\DfbSync\Module\Controller\DfbSyncController:
+    public: true
